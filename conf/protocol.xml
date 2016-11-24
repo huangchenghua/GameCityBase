@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocols>
+
+	<!-- 客户端请求登录 -->
+	<protocol name="c2l_login">
+		<mainCode>8</mainCode>
+		<subCode>1</subCode>
+		<field name="uuid" type="String"/>
+		<field name="sdkToken" type="String"/>
+	</protocol>
+	<!-- 客户端登录返回 -->
+	<protocol name="l2c_login">
+		<mainCode>8</mainCode>
+		<subCode>2</subCode>
+		<field name="name" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="gameToken" type="String"/>
+		<field name="serverlist" type="obj" array="true">
+			<field name="name"/>
+			<field name="address"/>
+			<field name="port"/>
+			<field name="status"/> <!-- 0表示服务器离线，1表示在线 -->
+		</field>
+	</protocol>
+	
+	<!-- 客户端请求登录游戏服务器 -->
+	<protocol name="c2g_login">
+		<mainCode>8</mainCode>
+		<subCode>1</subCode>
+		<field name="uuid" type="String"/>
+		<field name="gameToken" type="String"/>
+	</protocol>
+	<!-- 游戏服务器返回登录结果 opt为1表示成功-->
+	<protocol name="g2c_login">
+		<mainCode>8</mainCode>
+		<subCode>2</subCode>
+		<field name="opt" type="int"/>
+	</protocol>
+	
+	
+	
+	
+	
+	
+	<!-- 游戏服务器请求连接登录服务器 -->
+	<protocol name="g2l_login">
+		<mainCode>1</mainCode>
+		<subCode>1</subCode>
+		<field name="serverId" type="int"/>
+	</protocol>
+	
+	<protocol name="l2g_login">
+		<mainCode>1</mainCode>
+		<subCode>2</subCode>
+		<field name="opt" type="int"/>
+	</protocol>
+	
+	<protocol name="g2l_playerVerify">
+		<mainCode>8</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid" type="int"/>
+		<field name="gameToken" type="int"/>
+	</protocol>
+	
+	<protocol name="l2g_playerVerify">
+		<mainCode>8</mainCode>
+		<subCode>3</subCode>
+		<field name="name" type="String"/>
+		<field name="coin" type="long"/>
+	</protocol>
+	
+	<!-- 以下是内部协议号 -->
+	<protocol name="inner_login">
+		<mainCode>8</mainCode>
+		<subCode>11</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
+	<const name="g2c_login_opt_suc">1</const>
+	<const name="l2g_login_opt_suc">1</const>
+	
+</protocols>
