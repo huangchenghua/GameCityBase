@@ -56,15 +56,16 @@
 	</protocol>
 	
 	<protocol name="g2l_playerVerify">
-		<mainCode>8</mainCode>
+		<mainCode>1</mainCode>
 		<subCode>3</subCode>
-		<field name="uuid" type="int"/>
+		<field name="uuid" type="String"/>
 		<field name="gameToken" type="int"/>
 	</protocol>
 	
 	<protocol name="l2g_playerVerify">
-		<mainCode>8</mainCode>
-		<subCode>3</subCode>
+		<mainCode>1</mainCode>
+		<subCode>4</subCode>
+		<field name="uuid" type="String"/>
 		<field name="name" type="String"/>
 		<field name="coin" type="long"/>
 	</protocol>

@@ -52,15 +52,16 @@ public class Protocols{
 
 	}
 	public static final class G2l_playerVerify{
-		public static final int mainCode_value = 8;
+		public static final int mainCode_value = 1;
 		public static final int subCode_value = 3;
 		public static final String UUID = "uuid";
 		public static final String GAMETOKEN = "gameToken";
 
 	}
 	public static final class L2g_playerVerify{
-		public static final int mainCode_value = 8;
-		public static final int subCode_value = 3;
+		public static final int mainCode_value = 1;
+		public static final int subCode_value = 4;
+		public static final String UUID = "uuid";
 		public static final String NAME = "name";
 		public static final String COIN = "coin";
 
