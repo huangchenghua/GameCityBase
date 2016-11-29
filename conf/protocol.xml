@@ -12,8 +12,6 @@
 	<protocol name="l2c_login">
 		<mainCode>8</mainCode>
 		<subCode>2</subCode>
-		<field name="name" type="String"/>
-		<field name="coin" type="long"/>
 		<field name="gameToken" type="String"/>
 		<field name="serverlist" type="obj" array="true">
 			<field name="name"/>
@@ -22,6 +20,7 @@
 			<field name="status"/> <!-- 0表示服务器离线，1表示在线 -->
 		</field>
 	</protocol>
+	
 	
 	<!-- 客户端请求登录游戏服务器 -->
 	<protocol name="c2g_login">
@@ -34,11 +33,9 @@
 	<protocol name="g2c_login">
 		<mainCode>8</mainCode>
 		<subCode>2</subCode>
-		<field name="opt" type="int"/>
+		<field name="name" type="String"/>
+		<field name="coin" type="long"/>
 	</protocol>
-	
-	
-	
 	
 	
 	
@@ -70,6 +67,12 @@
 		<field name="coin" type="long"/>
 	</protocol>
 	
+	<protocol name="g2l_playerLogout">
+		<mainCode>1</mainCode>
+		<subCode>5</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
 	<!-- 以下是内部协议号 -->
 	<protocol name="inner_login">
 		<mainCode>8</mainCode>
@@ -77,7 +80,6 @@
 		<field name="uuid" type="String"/>
 	</protocol>
 	
-	<const name="g2c_login_opt_suc">1</const>
 	<const name="l2g_login_opt_suc">1</const>
 	
 </protocols>

@@ -13,8 +13,6 @@ public class Protocols{
 	public static final class L2c_login{
 		public static final int mainCode_value = 8;
 		public static final int subCode_value = 2;
-		public static final String NAME = "name";
-		public static final String COIN = "coin";
 		public static final String GAMETOKEN = "gameToken";
 		public static final String SERVERLIST = "serverlist";
 
@@ -36,7 +34,8 @@ public class Protocols{
 	public static final class G2c_login{
 		public static final int mainCode_value = 8;
 		public static final int subCode_value = 2;
-		public static final String OPT = "opt";
+		public static final String NAME = "name";
+		public static final String COIN = "coin";
 
 	}
 	public static final class G2l_login{
@@ -66,6 +65,12 @@ public class Protocols{
 		public static final String COIN = "coin";
 
 	}
+	public static final class G2l_playerLogout{
+		public static final int mainCode_value = 1;
+		public static final int subCode_value = 5;
+		public static final String UUID = "uuid";
+
+	}
 	public static final class Inner_login{
 		public static final int mainCode_value = 8;
 		public static final int subCode_value = 11;
@@ -73,7 +78,6 @@ public class Protocols{
 
 	}
 	public static final class ProtocolConst {
-		public static final String G2C_LOGIN_OPT_SUC ="1";
 		public static final String L2G_LOGIN_OPT_SUC ="1";
 
 	}

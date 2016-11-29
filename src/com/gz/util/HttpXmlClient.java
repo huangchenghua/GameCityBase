@@ -3,6 +3,7 @@ package com.gz.util;
 import java.io.IOException;  
 import java.io.UnsupportedEncodingException;  
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;  
 import java.util.Map;
@@ -34,7 +35,8 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.http.conn.ClientConnectionManager;  
 import org.apache.http.conn.scheme.Scheme;  
 import org.apache.http.conn.scheme.SchemeRegistry;  
-import org.apache.http.conn.ssl.SSLSocketFactory;  
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
   
 public class HttpXmlClient {  
@@ -164,8 +166,44 @@ public class HttpXmlClient {
         return result;  
     } 
     
+    public static  String doPost(String url,String content,String charset){  
+        HttpClient httpClient = null;  
+        HttpPost httpPost = null;  
+        String result = null;  
+        try{  
+            httpClient = new SSLClient();  
+            httpPost = new HttpPost(url);  
+            //设置参数  
+            
+            httpPost.setEntity(new StringEntity(content));
+            
+            HttpResponse response = httpClient.execute(httpPost);  
+            if(response != null){  
+                HttpEntity resEntity = response.getEntity();  
+                if(resEntity != null){  
+                    result = EntityUtils.toString(resEntity,charset);  
+                }  
+            }  
+        }catch(Exception ex){  
+            ex.printStackTrace();  
+        }  
+        return result;  
+    }
+    
+    public static void main(String[] args) {
+    	//mainCode=8&subCode=1&sdkToken=fb949fa7f98e42fd65cd900f42d307e9&uuid=8a5a710543d9469fada36c1d7a2788af
+    	HashMap<String,String> map=new HashMap<>();
+    	map.put("mainCode", "8");
+    	map.put("subCode", "1");
+    	map.put("sdkToken", "fb949fa7f98e42fd65cd900f42d307e9");
+    	map.put("uuid", "8a5a710543d9469fada36c1d7a2788af");
+		String result=doPost("http://127.0.0.1:8080/game/login", map, "utf-8");
+		System.out.println(result);
+	}
     
 }  
+
+
 class SSLClient extends DefaultHttpClient{  
     public SSLClient() throws Exception{  
         super();  
