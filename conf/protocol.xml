@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <protocols>
 
+	<!-- 以下是客户端与登录服的交互协议 -->
 	<!-- 客户端请求登录 -->
 	<protocol name="c2l_login">
-		<mainCode>8</mainCode>
+		<mainCode>player_login</mainCode>
 		<subCode>1</subCode>
 		<field name="uuid" type="String"/>
 		<field name="sdkToken" type="String"/>
 	</protocol>
 	<!-- 客户端登录返回 -->
 	<protocol name="l2c_login">
-		<mainCode>8</mainCode>
+		<mainCode>player_login</mainCode>
 		<subCode>2</subCode>
 		<field name="gameToken" type="String"/>
 		<field name="serverlist" type="obj" array="true">
@@ -21,65 +22,115 @@
 		</field>
 	</protocol>
 	
-	
+	<!-- 以下是客户端与游戏服的交互协议 -->
 	<!-- 客户端请求登录游戏服务器 -->
 	<protocol name="c2g_login">
-		<mainCode>8</mainCode>
+		<mainCode>player_game_login</mainCode>
 		<subCode>1</subCode>
 		<field name="uuid" type="String"/>
 		<field name="gameToken" type="String"/>
 	</protocol>
-	<!-- 游戏服务器返回登录结果 opt为1表示成功-->
+	<!-- 游戏服务器返回登录-->
 	<protocol name="g2c_login">
-		<mainCode>8</mainCode>
+		<mainCode>player_game_login</mainCode>
 		<subCode>2</subCode>
 		<field name="name" type="String"/>
 		<field name="coin" type="long"/>
 	</protocol>
+	<!-- 玩家金钱变化 -->
+	<protocol name="g2c_coinChange">
+		<mainCode>player_data_game</mainCode>
+		<subCode>1</subCode>
+		<field name="coin" type="long"/> <!-- 游戏币 -->
+		<field name="change" type="long"/><!-- 变化值，可以是负值 -->
+	</protocol>
+	<!-- 客户端请求进入拉霸房间 -->
+	<protocol name="c2g_laba_enter">
+		<mainCode>laba</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 服务器返回拉霸房间信息 -->
+	<protocol name="g2c_laba_enter">
+		<mainCode>laba</mainCode>
+		<subCode>2</subCode>
+		<field name="maxChip" type="long"/><!-- 允许最大的下注 -->		
+	</protocol>
 	
 	
 	
+	
+	
+	
+	
+	
+	<!-- 以下是游戏服与登录服交互的协议 -->
 	<!-- 游戏服务器请求连接登录服务器 -->
 	<protocol name="g2l_login">
-		<mainCode>1</mainCode>
+		<mainCode>gameServer_login</mainCode>
 		<subCode>1</subCode>
 		<field name="serverId" type="int"/>
 	</protocol>
 	
 	<protocol name="l2g_login">
-		<mainCode>1</mainCode>
+		<mainCode>gameServer_login</mainCode>
 		<subCode>2</subCode>
 		<field name="opt" type="int"/>
 	</protocol>
 	
 	<protocol name="g2l_playerVerify">
-		<mainCode>1</mainCode>
-		<subCode>3</subCode>
+		<mainCode>playerVerify</mainCode>
+		<subCode>1</subCode>
 		<field name="uuid" type="String"/>
 		<field name="gameToken" type="int"/>
 	</protocol>
 	
 	<protocol name="l2g_playerVerify">
-		<mainCode>1</mainCode>
-		<subCode>4</subCode>
+		<mainCode>playerVerify</mainCode>
+		<subCode>2</subCode>
 		<field name="uuid" type="String"/>
 		<field name="name" type="String"/>
 		<field name="coin" type="long"/>
 	</protocol>
 	
 	<protocol name="g2l_playerLogout">
-		<mainCode>1</mainCode>
-		<subCode>5</subCode>
+		<mainCode>playerVerify</mainCode>
+		<subCode>3</subCode>
 		<field name="uuid" type="String"/>
 	</protocol>
 	
-	<!-- 以下是内部协议号 -->
+	
+	<!-- 以下是登录服内部协议 -->
+	<!-- 以下是登录服内部协议号 -->
 	<protocol name="inner_login">
-		<mainCode>8</mainCode>
+		<mainCode>player_login</mainCode>
 		<subCode>11</subCode>
 		<field name="uuid" type="String"/>
 	</protocol>
 	
+	
+	<!-- 以下是游戏服内部协议 -->
+	<protocol name="inner_game_player_logout">
+		<mainCode>player_game_login</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
+	
+	
+	<!-- 以下是mainCode定义 -->
+	<mainCode name="gameServer_login">1</mainCode>
+	<mainCode name="player_login">2</mainCode>
+	<mainCode name="player_game_login">3</mainCode>
+	<mainCode name="playerVerify">4</mainCode>
+	<mainCode name="player_data_game">5</mainCode>
+	<mainCode name="player_data_login">6</mainCode>
+	<mainCode name="hall">7</mainCode>
+	<mainCode name="laba">8</mainCode>
+	
+	
+	<!-- 以下是常量定义 -->
 	<const name="l2g_login_opt_suc">1</const>
+	
+	
 	
 </protocols>

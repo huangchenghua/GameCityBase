@@ -35,14 +35,15 @@ public class ProtocolUtilMain {
 				protocol_list.add(protocol);
 			}
 			List constlist = servers.getChildren("const");
-			createJavaFile2(protocol_list,constlist);
+			List mainCodeList = servers.getChildren("mainCode");
+			createJavaFile2(protocol_list,constlist,mainCodeList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 	
-	private static void createJavaFile2(List<Element> fieldList,List constlist){
+	private static void createJavaFile2(List<Element> fieldList,List constlist,List mainCodeList){
 		FileWriter writer=null;
 		try {
 			writer = new FileWriter("./src/com/gz/gamecity/protocol/Protocols.java");
@@ -57,6 +58,8 @@ public class ProtocolUtilMain {
 			}
 
 			writeConst(writer,constlist);
+			
+			writeMainCode(writer, mainCodeList);
 			
 			writer.write("\r\n");
 			writer.write(tab1+"public static final String MAINCODE = \"mainCode\";"+"\r\n");
@@ -93,7 +96,7 @@ public class ProtocolUtilMain {
 			writer.write(tab +"public static final class "+className+"{"+"\r\n" );
 			
 			if(mainCode!=null && !mainCode.equals("")){
-				writer.write(tab + tab1 +"public static final int mainCode_value = "+ mainCode+";\r\n");
+				writer.write(tab + tab1 +"public static final int mainCode_value = MainCode."+ mainCode.toUpperCase()+";\r\n");
 			}
 			if(subCode!=null && !subCode.equals("")){
 				writer.write(tab + tab1 +"public static final int subCode_value = "+ subCode+";\r\n");
@@ -141,5 +144,25 @@ public class ProtocolUtilMain {
 		
 	}
 	
-
+	private static void writeMainCode(FileWriter writer,List mainCodelist){
+		try {
+			writer.write("\r\n");
+			writer.write(tab1 +"public static final class MainCode {"+"\r\n" );
+			
+			for(int i=0;i<mainCodelist.size();i++){
+				Element e = (Element) mainCodelist.get(i);
+				String name = e.getAttributeValue("name");
+				String value = e.getText();
+				writer.write(tab2+"public static final int "+name.toUpperCase()+" ="+value+";");
+				writer.write("\r\n");
+			}
+			
+			
+			writer.write("\r\n");
+			writer.write(tab1+"}");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

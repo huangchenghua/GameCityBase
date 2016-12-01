@@ -6,8 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.AttributeKey;
 
 public class Player {
+	
+	public static final AttributeKey<Player> NETTY_CHANNEL_KEY = AttributeKey.valueOf("player");
+	
 	public static final String NAME="name";
 	public static final String UUID="uuid";
 	public static final String COIN="coin";
@@ -15,6 +19,29 @@ public class Player {
 	private String name;
 	private long coin;
 	private String gameToken;
+	private int serverId;
+	private boolean onTable;
+	private boolean online;
+	
+	
+	public boolean isOnline() {
+		return online;
+	}
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+	public boolean isOnTable() {
+		return onTable;
+	}
+	public void setOnTable(boolean onTable) {
+		this.onTable = onTable;
+	}
+	public int getServerId() {
+		return serverId;
+	}
+	public void setServerId(int serverId) {
+		this.serverId = serverId;
+	}
 	public String getGameToken() {
 		return gameToken;
 	}
