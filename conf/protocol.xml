@@ -15,12 +15,19 @@
 		<subCode>2</subCode>
 		<field name="gameToken" type="String"/>
 		<field name="serverlist" type="obj" array="true">
-			<field name="name"/>
-			<field name="address"/>
-			<field name="port"/>
-			<field name="status"/> <!-- 0表示服务器离线，1表示在线 -->
+			<field name="name" type="String"/>
+			<field name="address" type="String"/>
+			<field name="port" type="int"/>
+			<field name="status" type="int"/> <!-- 0表示服务器离线，1表示在线 -->
 		</field>
 	</protocol>
+	
+	<protocol name="c2l_login_test">
+		<mainCode>player_login</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
 	
 	<!-- 以下是客户端与游戏服的交互协议 -->
 	<!-- 客户端请求登录游戏服务器 -->
@@ -36,7 +43,34 @@
 		<subCode>2</subCode>
 		<field name="name" type="String"/>
 		<field name="coin" type="long"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="charge_total" type="int"/>
+		<field name="sex" type="byte"/>
+		<field name="lvl" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="sign" type="String"/>
+		<field name="charm" type="int"/>
+		<field name="timestamp" type="long"/><!-- 服务器当前时间 -->
 	</protocol>
+	<!-- 客户端直接登录游戏服，测试游戏逻辑专用 -->
+	<protocol name="c2g_test_login">
+		<mainCode>player_game_login</mainCode>
+		<subCode>4</subCode>
+		<field name="coin" type="long"/>
+		<field name="timestamp" type="long"/><!-- 服务器当前时间 -->
+	</protocol>
+	<!-- 客户端被顶下线 -->
+	<protocol name="g2c_kick">
+		<mainCode>player_game_login</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	<!-- 客户端主界面加载成功通知 -->
+	<protocol name="c2g_init_suc">
+		<mainCode>player_game_login</mainCode>
+		<subCode>6</subCode>
+	</protocol>
+	
 	<!-- 玩家金钱变化 -->
 	<protocol name="g2c_coinChange">
 		<mainCode>player_data_game</mainCode>
@@ -49,11 +83,533 @@
 		<mainCode>laba</mainCode>
 		<subCode>1</subCode>
 	</protocol>
-	<!-- 服务器返回拉霸房间信息 -->
+	<!-- 服务器返回拉霸房间信息,如果没有error就表示成功-->
 	<protocol name="g2c_laba_enter">
 		<mainCode>laba</mainCode>
 		<subCode>2</subCode>
-		<field name="maxChip" type="long"/><!-- 允许最大的下注 -->		
+	</protocol>
+	<!-- 拉霸下注 -->
+	<protocol name="c2g_laba_bet">
+		<mainCode>laba</mainCode>
+		<subCode>3</subCode>
+		<field name="bet" type="long"/>
+	</protocol>
+	<!-- 拉霸下注返回 -->
+	<protocol name="g2c_laba_bet">
+		<mainCode>laba</mainCode>
+		<subCode>4</subCode>
+		<field name="option" type="int"/><!-- 返回客户端猜中哪个，0表示没中 -->
+	</protocol>
+	<!-- 拉霸猜金币 -->
+	<protocol name="c2g_laba_guess">
+		<mainCode>laba</mainCode>
+		<subCode>5</subCode>
+		<field name="rate" type="int"/><!-- 倍数 -->
+	</protocol>
+	<!-- 拉霸猜金币返回 -->
+	<protocol name="g2c_laba_guess">
+		<mainCode>laba</mainCode>
+		<subCode>6</subCode>
+		<field name="option" type="byte"/><!-- 0表示输，1表示赢 -->
+		<field name="star"  type="int"/>
+	</protocol>
+	<!-- 拉霸收分 -->
+	<protocol name="c2g_laba_getpoint">
+		<mainCode>laba</mainCode>
+		<subCode>7</subCode>
+	</protocol>
+	<!-- 拉霸收分返回 -->
+	<protocol name="g2c_laba_getpoint">
+		<mainCode>laba</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	<!-- 拉霸离开 -->
+	<protocol name="c2g_laba_leave">
+		<mainCode>laba</mainCode>
+		<subCode>9</subCode>
+	</protocol>
+	
+	
+	<!-- 血战麻将进入游戏 -->
+	<protocol name="c2g_mahjong_enter">
+		<mainCode>mahjong</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	
+	<protocol name="g2c_mahjong_enter">
+		<mainCode>mahjong</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	
+	<!-- 血战麻将猜牌 -->
+	<protocol name="c2g_mahjong_bet">
+		<mainCode>mahjong</mainCode>
+		<subCode>3</subCode>
+		<field name="bet" type="long"/>
+		<field name="lock"  type="boolean"/>
+		<field name="probability" type="int"/>
+	</protocol>
+	
+	<protocol name="g2c_mahjong_bet">
+		<mainCode>mahjong</mainCode>
+		<subCode>4</subCode>
+		<field name="win" type="boolean"/>
+		<field name="result" type="int" array="true"/>
+	</protocol>
+	
+	<!-- 血战麻将看牌 -->
+	<protocol name="c2g_mahjong_getview">
+		<mainCode>mahjong</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	
+	<protocol name="g2c_mahjong_getview">
+		<mainCode>mahjong</mainCode>
+		<subCode>6</subCode>
+		<field name="result" type="int" array="true"/>
+	</protocol>
+	
+	<!-- 血战麻将收分 -->
+	<protocol name="c2g_mahjong_getpoint">
+		<mainCode>mahjong</mainCode>
+		<subCode>7</subCode>
+	</protocol>
+	
+	<protocol name="g2c_mahjong_getpoint">
+		<mainCode>mahjong</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	
+	<!-- 血战麻将离开 -->
+	<protocol name="c2g_mahjong_leave">
+		<mainCode>mahjong</mainCode>
+		<subCode>9</subCode>
+	</protocol>
+	
+	<!-- 血战麻将开始 -->
+	<protocol name="c2g_mahjong_start">
+		<mainCode>mahjong</mainCode>
+		<subCode>10</subCode>
+	</protocol>
+	
+	<!-- 客户端请求进入大转盘房间 -->
+	<protocol name="c2g_luckyWheel_enter">
+		<mainCode>luckyWheel</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 服务器返回大转盘房间信息,如果没有error就表示成功-->
+	<protocol name="g2c_luckyWheel_enter">
+		<mainCode>luckyWheel</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	<!-- 大转盘下注 -->
+	<protocol name="c2g_luckyWheel_bet">
+		<mainCode>luckyWheel</mainCode>
+		<subCode>3</subCode>
+		<field name="bet" type="long"/>
+	</protocol>
+	<protocol name="c2g_luckyWheel_leave">
+		<mainCode>luckyWheel</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	
+	
+	<protocol name="g2c_luckyWheel_reward">
+		<mainCode>luckyWheel</mainCode>
+		<subCode>4</subCode>
+		<field name="reward" type="long"/>
+		<field name="result" type="int"/> <!-- 这个字段表示中了那个 -->
+	</protocol>
+	
+		
+	<!-- 客户端请求进入黑桃A房间 -->
+	<protocol name="c2g_blackA_enter">
+		<mainCode>blackA</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 服务器返回大转盘房间信息,如果没有error就表示成功-->
+	<protocol name="g2c_blackA_enter">
+		<mainCode>blackA</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	<!-- 黑桃A下注 -->
+	<protocol name="c2g_blackA_bet">
+		<mainCode>blackA</mainCode>
+		<subCode>3</subCode>
+		<field name="bet" type="long"/>
+	</protocol>
+	
+	<protocol name="g2c_blackA_reward">
+		<mainCode>blackA</mainCode>
+		<subCode>4</subCode>
+		<field name="reward" type="long"/>
+		<field name="result" type="int"/> <!-- 这个字段表示中了那个 -->
+		<field name="star" type="int"/>
+	</protocol>
+	<!-- 收分 -->
+	<protocol name="c2g_blackA_getbet">
+		<mainCode>blackA</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	
+	
+	<protocol name="c2g_blackA_leave">
+		<mainCode>blackA</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	
+	
+	<!-- 客户端请求进入牛牛房间 -->
+	<protocol name="c2g_niuniu_enter">
+		<mainCode>niuniu</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 服务器返回进入牛牛房间,没有error就表示成功 -->
+	<protocol name="g2c_niuniu_enter">
+		<mainCode>niuniu</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	<!-- 客户端选择等级并开始游戏  -->
+	<protocol name="c2g_niuniu_choose_lvl">
+		<mainCode>niuniu</mainCode>
+		<subCode>3</subCode>
+		<field name="lvl" type="int"/>
+	</protocol>
+	<!-- 服务器返回对应的桌子信息 -->
+	<protocol name="g2c_niuniu_tableInfo">
+		<mainCode>niuniu</mainCode>
+		<subCode>4</subCode>
+		<field name="lvl" type="int"/>
+		<field name="tableStatus" type="int"/> <!-- 牌局状态 0等待开始，1下注 -->
+		<field name="remain_timestamp" type="long"/> <!-- 剩余操作时间 -->
+		<field name="isReconnect" type="boolean"/>
+	</protocol>
+	
+	<!-- 通知客户端开始下注 -->
+	<protocol name="g2c_niuniu_begin_bet">
+		<mainCode>niuniu</mainCode>
+		<subCode>5</subCode>
+		<field name="remain_timestamp" type="long"/><!-- 可以下注的时间 -->
+	</protocol>
+	
+	<!-- 玩家请求下注 -->
+	<protocol name="c2g_niuniu_bet">
+		<mainCode>niuniu</mainCode>
+		<subCode>6</subCode>
+		<field name="id"/><!-- 1天2地3玄4黄 -->
+		<field name="bet_index" type="int"/>
+	</protocol>	
+	<!-- 下注返回 error表示下注失败 -->
+	<protocol name="g2c_niuniu_bet">
+		<mainCode>niuniu</mainCode>
+		<subCode>7</subCode>
+		<field name="id"/><!-- 1天2地3玄4黄 -->
+		<field name="bets" type="long"/>
+	</protocol>
+	<!-- 台面上的筹码刷新 -->
+	<protocol name="g2c_niuniu_bet_refresh">
+		<mainCode>niuniu</mainCode>
+		<subCode>8</subCode>
+		<field name="betInfo" type="obj" array="true">
+			<field name="id"/><!-- 1天2地3玄4黄 -->
+			<field name="bets" type="long"/><!-- 下注金额 -->
+		</field>
+	</protocol>
+	<!-- 摊牌 -->
+	<protocol name="g2c_niuniu_result">
+		<mainCode>niuniu</mainCode>
+		<subCode>9</subCode>
+		<field name="remain_timestamp" type="long"/><!-- 距离下局开始的时间 -->
+		<field name="resultInfo" type="obj" array="true">
+			<field name="id"/><!-- 0庄家1天2地3玄4黄 -->
+			<field name="index_rank" type="int"/>
+			<field name="cardType"  type="int"/>
+			<field name="poker"  type="int" array="true"/>
+		</field>
+	</protocol>
+	<!-- 申请上庄 -->
+	<protocol name="c2g_niuniu_req_banker">
+		<mainCode>niuniu</mainCode>
+		<subCode>10</subCode>
+	</protocol>
+	<!-- 如果没有errorcode就表示请求成功 -->
+	<protocol name="g2c_niuniu_req_banker">
+		<mainCode>niuniu</mainCode>
+		<subCode>11</subCode>
+		<field name="index" type="int"/>
+	</protocol>
+	<!-- 上庄队列 -->
+	<protocol name="g2c_niuniu_banker_list">
+		<mainCode>niuniu</mainCode>
+		<subCode>12</subCode>
+		<field name="list" type="String" array="true"/>
+		<field name="banker" type="obj">
+			<field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="coin" type="long"/>
+			<field name="head" type="int"/>
+			<field name="system" type="boolean"/>
+		</field>
+	</protocol>
+	<!-- 申请下庄 -->
+	<protocol name="c2g_niuniu_quit_banker">
+		<mainCode>niuniu</mainCode>
+		<subCode>13</subCode>
+	</protocol>
+	<!-- 下庄返回包，没有error就表示成功 -->
+	<protocol name="g2c_niuniu_quit_banker">
+		<mainCode>niuniu</mainCode>
+		<subCode>24</subCode>
+	</protocol>
+	
+	
+	<protocol name="g2c_niuniu_playerlist">
+		<mainCode>niuniu</mainCode>
+		<subCode>14</subCode>
+		<field name="players"  type="obj" array="true"> 
+			<field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="coin" type="long"/>
+			<field name="head" type="int"/>
+		</field>
+	</protocol>
+	
+	<!-- 玩家下注通知 -->
+	<protocol name="g2c_niuniu_player_bet_notify">
+		<mainCode>niuniu</mainCode>
+		<subCode>15</subCode>
+		<field name="uuid"  type="String"/> 
+		<field name="bet" type="long"/>
+		<field name="id" type="int"/> <!-- 0庄家1天2地3玄4黄 -->
+	</protocol>
+	<!-- 前八输赢 -->
+	<protocol name="g2c_niuniu_8reward">
+		<mainCode>niuniu</mainCode>
+		<subCode>16</subCode>
+		<field name="player_reward" type="obj" array="true">
+			<field name="uuid"  type="String"/> 
+			<field name="reward" type="long"/>
+		</field>
+	</protocol>
+	<!-- 玩家请求离开房间 -->
+	<protocol name="c2g_niuniu_leave_room">
+		<mainCode>niuniu</mainCode>
+		<subCode>17</subCode>
+	</protocol>
+	<protocol name="g2c_niuniu_leave_room">
+		<mainCode>niuniu</mainCode>
+		<subCode>18</subCode>
+	</protocol>
+	<!-- 玩家请求离开桌子 -->
+	<protocol name="c2g_niuniu_leave_table">
+		<mainCode>niuniu</mainCode>
+		<subCode>19</subCode>
+	</protocol>
+	<protocol name="g2c_niuniu_leave_table">
+		<mainCode>niuniu</mainCode>
+		<subCode>20</subCode>
+	</protocol>
+	<!-- 玩家被提出桌子 -->
+	<protocol name="g2c_niuniu_kick_table">
+		<mainCode>niuniu</mainCode>
+		<subCode>21</subCode>
+		<field name="info" type="String"/>
+	</protocol>
+	<!-- 庄家金钱刷新 -->
+	<protocol name="g2c_niuniu_banker_coin_refresh">
+		<mainCode>niuniu</mainCode>
+		<subCode>22</subCode>
+		<field name="coin" type="long"/>
+	</protocol>
+	<!-- 庄家排队序列更新 -->
+	<protocol name="g2c_niuniu_banker_index">
+		<mainCode>niuniu</mainCode>
+		<subCode>23</subCode>
+		<field name="index" type="int"/>
+	</protocol>
+	
+	<!-- texas holdem poker -->
+	<protocol name="c2g_texas_enter_room">
+		<mainCode>texas</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<protocol name="g2c_texas_enter_room">
+		<mainCode>texas</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	<protocol name="c2g_texas_choose_lv">
+		<mainCode>texas</mainCode>
+		<subCode>3</subCode>
+		<field name="lv" type="int"/>
+	</protocol>
+	<protocol name="g2c_texas_choose_lv">
+		<mainCode>texas</mainCode>
+		<subCode>4</subCode>
+	</protocol>
+	<protocol name="g2c_texas_table_info">
+		<mainCode>texas</mainCode>
+		<subCode>5</subCode>
+		<field name="round" type="int"/>
+		<field name="button_index" type="int"/>
+		<field name="table_card1" type="int"/>
+		<field name="table_card2" type="int"/>
+		<field name="table_card3" type="int"/>
+		<field name="table_card4" type="int"/>
+		<field name="table_card5" type="int"/>
+		<field name="pot_total" type="long"/>
+		<field name="pot" type="obj" array="true">
+			<field name="coin" type="long"/>
+			<field name="winner" type="obj" array="true">
+				<field name="uuid" type="string"/>
+				<field name="seat_index" type="int"/>
+			</field>
+		</field>
+		<field name="player_info" type="obj" array="true">
+			<field name="uuid" type="string" />
+			<field name="head" type="int" />
+			<field name="name" type="string"/>
+			<field name="seat_index" type="int"/>
+			<field name="status" type="int"/>
+			<field name="coin" type="long"/>
+			<field name="bet" type="int"/>
+			<field name="action" type="int"/>
+		</field>
+	</protocol>
+	<protocol name="g2c_texas_hand_card">
+		<mainCode>texas</mainCode>
+		<subCode>6</subCode>
+		<field name="hand_card" type="obj" array="true">
+			<field name="uuid" type="string"/>
+			<field name="card1" type="int"/>
+			<field name="card2" type="int"/>
+			<field name="result" type="int"/>
+		</field>
+	</protocol>
+	<protocol name="c2g_texas_bet">
+		<mainCode>texas</mainCode>
+		<subCode>7</subCode>
+		<field name="action_type" type="int"/>
+		<field name="bet" type="long"/>
+	</protocol>
+	<protocol name="g2c_texas_bet">
+		<mainCode>texas</mainCode>
+		<subCode>8</subCode>
+		<field name="desc" type="string"/>
+	</protocol>
+	<protocol name="c2g_texas_leave_room">
+		<mainCode>texas</mainCode>
+		<subCode>9</subCode>
+	</protocol>
+	<protocol name="g2c_texas_leave_room">
+		<mainCode>texas</mainCode>
+		<subCode>10</subCode>
+		<field name="uuid" type="string" />
+	</protocol>
+	<protocol name="g2c_texas_kick_out_table">
+		<mainCode>texas</mainCode>
+		<subCode>11</subCode>
+		<field name="uuid" type="string"/>
+		<field name="desc" type="string"/>
+	</protocol>
+	<protocol name="g2c_texas_match_result">
+		<mainCode>texas</mainCode>
+		<subCode>12</subCode>
+		<field name="pot" type="obj" array="true">
+			<field name="coin" type="long"/>
+			<field name="winner" type="obj" array="true">
+				<field name="uuid" type="string"/>
+				<field name="seat_index" type="int"/>
+			</field>
+		</field>
+	</protocol>
+	<protocol name="g2c_texas_start_time_left">
+		<mainCode>texas</mainCode>
+		<subCode>13</subCode>
+		<field name="start_delay_second" type="int"/>
+	</protocol>
+	<protocol name="g2c_texas_round_info">
+		<mainCode>texas</mainCode>
+		<subCode>14</subCode>
+		<field name="is_check" type="boolean"/>
+	</protocol>
+	<protocol name="c2g_texas_levae_table">
+		<mainCode>texas</mainCode>
+		<subCode>15</subCode>
+		<field name="tableId" type="string"/>
+	</protocol>
+	<protocol name="g2c_texas_levae_table">
+		<mainCode>texas</mainCode>
+		<subCode>16</subCode>
+		<field name="tableId" type="string"/>
+	</protocol>
+	<protocol name="g2c_texas_remove_seat">
+		<mainCode>texas</mainCode>
+		<subCode>17</subCode>
+		<field name="seat_index" type="int"/>
+	</protocol>
+	
+	
+	
+	
+	
+	<!-- 请求进入水果机 -->
+	<protocol name="c2g_fruit_enter">
+		<mainCode>fruit</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 进入水果机返回，没有errorcode表示成功 -->
+	<protocol name="g2c_fruit_enter">
+		<mainCode>fruit</mainCode>
+		<subCode>2</subCode>
+		<field name="results" type="int" array="true"/><!-- 前几局的结果 -->
+		<field name="tableStatus" type="int"/> <!-- 牌局状态 0等待开始，1下注 -->
+		<field name="remain_timestamp" type="long"/> <!-- 剩余操作时间 -->
+	</protocol>
+	<!-- 玩家下注 -->
+	<protocol name="c2g_fruit_bet">
+		<mainCode>fruit</mainCode>
+		<subCode>3</subCode>
+		<field name="id" type="int"/><!-- 0-7 表示苹果到BAR -->
+		<field name="bet_index" type="int"/> <!-- 0-4 -->
+	</protocol>
+	<!-- 下注返回，没有errorcode表示成功 -->
+	<protocol name="g2c_fruit_bet">
+		<mainCode>fruit</mainCode>
+		<subCode>4</subCode>
+		<field name="betInfo" type="obj" array="true">
+			<field name="id"/>
+			<field name="bets" type="long"/><!-- 下注金额 -->
+		</field>
+	</protocol>
+	<!-- 下注筹码刷新 -->
+	<protocol name="g2c_fruit_bet_refresh">
+		<mainCode>fruit</mainCode>
+		<subCode>5</subCode>
+		<field name="betInfo" type="obj" array="true">
+			<field name="id"/>
+			<field name="bets" type="long"/><!-- 下注金额 -->
+		</field>
+	</protocol>
+	<!-- 开奖 -->
+	<protocol name="g2c_fruit_result">
+		<mainCode>fruit</mainCode>
+		<subCode>6</subCode>
+		<field name="remain_timestamp" type="long"/><!-- 距离下局开始的时间 -->
+		<field name="option" type ="int"/>
+	</protocol>
+	<!-- 玩家请求离开桌子 -->
+	<protocol name="c2g_fruit_leave_table">
+		<mainCode>fruit</mainCode>
+		<subCode>7</subCode>
+	</protocol>
+	<protocol name="g2c_fruit_leave_table">
+		<mainCode>fruit</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	<protocol name="g2c_fruit_begin_bet">
+		<mainCode>fruit</mainCode>
+		<subCode>9</subCode>
+		<field name="remain_timestamp" type="long"/> <!-- 剩余操作时间 -->
 	</protocol>
 	
 	
@@ -61,8 +617,168 @@
 	
 	
 	
+	<!-- 心跳 -->
+	<protocol name="c2g_heart_ping">
+		<mainCode>heart</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<protocol name="g2c_heart_pong">
+		<mainCode>heart</mainCode>
+		<subCode>2</subCode>
+	</protocol>
 	
 	
+	<!--玩家信息修改 -->
+	<protocol name="c2g_data_change">
+		<mainCode>player_data_game</mainCode>
+		<subCode>2</subCode>
+		<field name="name" type="String"/>
+		<field name="head" type="int"/>
+		<field name="sex" type="byte"/>
+		<field name="sign" type="String"/>
+	</protocol>
+	<!--玩家信息修改返回 没有errorcode表示成功 -->
+	<protocol name="g2c_data_change">
+		<mainCode>player_data_game</mainCode>
+		<subCode>3</subCode>
+	</protocol>
+	<!-- 玩家信息更新 -->
+	<protocol name="g2c_player_refresh">
+		<mainCode>player_data_game</mainCode>
+		<subCode>4</subCode>
+		<field name="name" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="charge_total" type="int"/>
+		<field name="sex" type="byte"/>
+		<field name="lvl" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="sign" type="String"/>
+		<field name="charm" type="int"/>
+	</protocol>
+	
+	<!-- 请求收到的礼物列表 -->
+	<protocol name="c2g_player_gift_list">
+		<mainCode>player_data_game</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	
+	<protocol name="g2c_player_gift_list">
+		<mainCode>player_data_game</mainCode>
+		<subCode>6</subCode>
+		<field name="id" type="int" array="true"/>
+		<field name="count" type="int" array="true"/>
+	</protocol>
+	
+	<protocol name="g2c_player_gift_change">
+		<mainCode>player_data_game</mainCode>
+		<subCode>7</subCode>
+		<field name="id" type="int"/>
+		<field name="count" type="int"/>
+	</protocol>
+	
+	<!-- 请求商城列表 -->
+	<protocol name="c2g_shop">
+		<mainCode>hall</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 返回商城信息 -->
+	<protocol name="g2c_shop">
+		<mainCode>hall</mainCode>
+		<subCode>2</subCode>
+		<field name="shoplist" type="obj" array="true">
+			<field name="fee" type="int"/>
+			<field name="coin" type="int"/>
+			<field name="icon" type="int"/>
+			<field name="itemId" type="int"/>
+		</field>
+	</protocol>
+	
+	
+	<!-- 请求邮件列表 -->
+	<protocol name="c2g_mail_list">
+		<mainCode>mail</mainCode>
+		<subCode>1</subCode>
+	</protocol>
+	<!-- 返回邮件列表 -->
+	<protocol name="g2c_mail_list">
+		<mainCode>mail</mainCode>
+		<subCode>2</subCode>
+		<field name="mail_list" type="obj" array="true">
+			<field name="mailId" type="String"/>
+			<field name="title" type="String"/>
+			<field name="content" type="String"/>
+			<field name="send_time" type="String"/>
+			<field name="read" type="boolean"/>
+			<field name="taken" type="boolean"/>
+			<field name="attachments" type="String" />
+		</field>
+	</protocol>
+	<!-- 新增邮件 -->
+	<protocol name="g2c_new_mail">
+		<mainCode>mail</mainCode>
+		<subCode>3</subCode>
+		<field name="mailId" type="String"/>
+		<field name="title" type="String"/>
+		<field name="content" type="String"/>
+		<field name="send_time" type="String"/>
+		<field name="read" type="boolean"/>
+		<field name="taken" type="boolean"/>
+		<field name="attachments" type="String"/>
+	</protocol>
+	<!-- 打开邮件 -->
+	<protocol name="c2g_open_mail">
+		<mainCode>mail</mainCode>
+		<subCode>4</subCode>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<!-- 领取附件 -->
+	<protocol name="c2g_take_mail">
+		<mainCode>mail</mainCode>
+		<subCode>5</subCode>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<!-- 删除邮件 -->
+	<protocol name="c2g_delete_mail">
+		<mainCode>mail</mainCode>
+		<subCode>6</subCode>
+		<field name="mailIds" type="String"/><!-- 用','分割 -->
+	</protocol>
+	
+	
+	
+	
+	<!-- 请求充值 -->
+	<protocol name="c2g_test_charge">
+		<mainCode>test</mainCode>
+		<subCode>1</subCode>
+		<field name="coin" type="long"/>
+	</protocol>
+	
+	
+	
+	<!-- 聊天 -->
+	<!-- 服务器收取聊天信息 -->
+	<protocol name="c2g_send_msg">
+	    <mainCode>chat</mainCode>
+	    <subCode>1</subCode>
+	    <field name="revMsg" type="string"/>
+	</protocol>
+	
+	<!-- 服务器发送聊天信息 -->
+	<protocol name="g2c_send_msg">
+		<mainCode>chat</mainCode>
+		<subCode>2</subCode>
+		<field name="revMsg" type="string"/>
+		<field name="uuid" type="string"/>
+		<field name="name" type="string"/>
+		<field name="head" type="int"/>
+		<field name="lvl" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="finance" type="int"/>
+	</protocol>
+		
 	<!-- 以下是游戏服与登录服交互的协议 -->
 	<!-- 游戏服务器请求连接登录服务器 -->
 	<protocol name="g2l_login">
@@ -81,27 +797,148 @@
 		<mainCode>playerVerify</mainCode>
 		<subCode>1</subCode>
 		<field name="uuid" type="String"/>
-		<field name="gameToken" type="int"/>
+		<field name="gameToken" type="String"/>
 	</protocol>
 	
 	<protocol name="l2g_playerVerify">
 		<mainCode>playerVerify</mainCode>
 		<subCode>2</subCode>
 		<field name="uuid" type="String"/>
+		<field name="gameToken" type="String"/>
 		<field name="name" type="String"/>
 		<field name="coin" type="long"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="charge_total" type="int"/>
+		<field name="sex" type="byte"/>
+		<field name="lvl" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="sign" type="String"/>
+		<field name="charm" type="int"/>
 	</protocol>
 	
 	<protocol name="g2l_playerLogout">
 		<mainCode>playerVerify</mainCode>
 		<subCode>3</subCode>
 		<field name="uuid" type="String"/>
+		<field name="gameToken" type="String"/>
 	</protocol>
+	
+	<protocol name="l2g_kickPlayer">
+		<mainCode>playerVerify</mainCode>
+		<subCode>4</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
+	<protocol name="g2l_coinChange">
+		<mainCode>player_data_login</mainCode>
+		<subCode>1</subCode>
+		<field name="uuid" type="String"/>
+		<field name="log_uuid" type="String"/>
+		<field name="coin" type="long"/> <!-- 游戏币 -->
+		<field name="change" type="long"/> <!-- 变化值，可以是负值 -->
+		<field name="type" type="int"/>
+	</protocol>
+	
+	<!--玩家信息修改 -->
+	<protocol name="g2l_data_change">
+		<mainCode>player_data_login</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid" type="String"/>
+		<field name="name" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="charge_total" type="int"/>
+		<field name="sex" type="byte"/>
+		<field name="lvl" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="sign" type="String"/>
+		<field name="charm" type="int"/>
+	</protocol>
+	
+	<!-- 请求邮件列表 -->
+	<protocol name="g2l_mail_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>4</subCode>
+		<field name="uuid"/>
+	</protocol>
+	<!-- 返回邮件列表 -->
+	<protocol name="l2g_mail_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>5</subCode>
+		<field name="uuid"/>
+		<field name="mail_list" type="obj" array="true">
+			<field name="mailId" type="String"/>
+			<field name="title" type="String"/>
+			<field name="content" type="String"/>
+			<field name="send_time" type="String"/>
+			<field name="read" type="boolean"/>
+			<field name="taken" type="boolean"/>
+			<field name="attachments" type="String"/>
+		</field>
+	</protocol>
+	<!-- 新增邮件 -->
+	<protocol name="g2l_new_mail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>6</subCode>
+		<field name="uuid" type="String"/>
+		<field name="mailId" type="String"/>
+		<field name="title" type="String"/>
+		<field name="content" type="String"/>
+		<field name="send_time" type="String"/>
+		<field name="read" type="boolean"/>
+		<field name="taken" type="boolean"/>
+		<field name="attachments" type="String"/>
+	</protocol>
+	<!-- 打开邮件 -->
+	<protocol name="g2l_open_mail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>7</subCode>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<!-- 领取附件 -->
+	<protocol name="g2l_take_mail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>8</subCode>
+		<field name="uuid"/>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<!-- 删除邮件 -->
+	<protocol name="g2l_delete_mail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>9</subCode>
+		<field name="mailIds" type="String"/>
+	</protocol>
+	
+	<protocol name="g2l_player_gift_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>10</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
+	<protocol name="l2g_player_gift_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>11</subCode>
+		<field name="uuid" type="String"/>
+		<field name="id" type="int" array="true"/>
+		<field name="count" type="int" array="true"/>
+	</protocol>
+	
+	<protocol name="g2l_player_gift_change">
+		<mainCode>player_data_login</mainCode>
+		<subCode>12</subCode>
+		<field name="uuid" type="String"/>
+		<field name="id" type="int"/>
+		<field name="count" type="int"/>
+	</protocol>
+	
+	
 	
 	
 	<!-- 以下是登录服内部协议 -->
 	<!-- 以下是登录服内部协议号 -->
-	<protocol name="inner_login">
+	<protocol name="inner_sdk_verify_suc">
 		<mainCode>player_login</mainCode>
 		<subCode>11</subCode>
 		<field name="uuid" type="String"/>
@@ -113,6 +950,140 @@
 		<mainCode>player_game_login</mainCode>
 		<subCode>3</subCode>
 		<field name="uuid" type="String"/>
+	</protocol>
+	<!-- 牛牛开始下注 -->
+	<protocol name="inner_game_niuniu_start_bet">
+		<mainCode>niuniu</mainCode>
+		<subCode>90</subCode>
+		<field name="tableId" type="String"/>
+	</protocol>
+	<!-- 牛牛结账 -->
+	<protocol name="inner_game_niuniu_checkout">
+		<mainCode>niuniu</mainCode>
+		<subCode>91</subCode>
+		<field name="tableId" type="String"/>
+	</protocol>
+	<!-- 水果机开始下注 -->
+	<protocol name="inner_game_fruit_start_bet">
+		<mainCode>fruit</mainCode>
+		<subCode>90</subCode>
+	</protocol>
+	<!-- 水果机结账 -->
+	<protocol name="inner_game_fruit_checkout">
+		<mainCode>fruit</mainCode>
+		<subCode>91</subCode>
+	</protocol>
+	
+	<!-- 德州开始下一轮 -->
+	<protocol name="inner_game_texas_start">
+		<mainCode>texas</mainCode>
+		<subCode>101</subCode>
+		<field name="tableId" type="string"/>
+	</protocol>
+	<protocol name="inner_game_texas_player_action">
+		<mainCode>texas</mainCode>
+		<subCode>102</subCode>
+		<field name="tableId" type="string"/>
+		<field name="seat_index" type="int"/>
+		<field name="round" type="int"/>
+	</protocol>
+	
+	
+	
+	<!-- 游戏币变化数据库记录 -->
+	<protocol name="DB_game_coin_change">
+		<mainCode>game_db</mainCode>
+		<subCode>1</subCode>
+		<field name="player_uuid" type="String"/>
+		<field name="log_uuid" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="change" type="long"/>
+		<field name="type" type="int"/>
+	</protocol>
+	
+	<protocol name="DB_login_coin_change">
+		<mainCode>game_db</mainCode>
+		<subCode>2</subCode>
+		<field name="player_uuid" type="String"/>
+		<field name="log_uuid" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="change" type="long"/>
+		<field name="type" type="int"/>
+	</protocol>
+	
+	<protocol name="DB_login_update_player_coin">
+		<mainCode>game_db</mainCode>
+		<subCode>3</subCode>
+		<field name="player_uuid" type="String"/>
+		<field name="coin" type="long"/>
+	</protocol>
+	
+	<protocol name="DB_data_change">
+		<mainCode>game_db</mainCode>
+		<subCode>4</subCode>
+		<field name="data" type="obj">
+		    <field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="coin" type="long"/>
+			<field name="head" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="charge_total" type="int"/>
+			<field name="sex" type="byte"/>
+			<field name="lvl" type="int"/>
+			<field name="finance" type="int"/>
+			<field name="sign" type="String"/>
+			<field name="charm" type="int"/>
+		</field>
+	</protocol>
+	
+	<protocol name="DB_login_mail_list">
+		<mainCode>game_db</mainCode>
+		<subCode>5</subCode>
+		<field name="player_uuid" type="String"/>
+		<field name="serverId" type="int"/>
+	</protocol>
+	
+	<protocol name="DB_login_new_mail">
+		<mainCode>game_db</mainCode>
+		<subCode>6</subCode>
+		<field name="uuid" type="String"/>
+		<field name="mailId" type="String"/>
+		<field name="title" type="String"/>
+		<field name="content" type="String"/>
+		<field name="send_time" type="String"/>
+		<field name="read" type="boolean"/>
+		<field name="taken" type="boolean"/>
+		<field name="attachments" type="String"/>
+	</protocol>
+	
+	<protocol name="DB_login_open_mail">
+		<mainCode>game_db</mainCode>
+		<subCode>7</subCode>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<protocol name="DB_login_take_mail">
+		<mainCode>game_db</mainCode>
+		<subCode>8</subCode>
+		<field name="uuid" type="String"/>
+		<field name="mailId" type="String"/>
+	</protocol>
+	<protocol name="DB_login_delete_mail">
+		<mainCode>game_db</mainCode>
+		<subCode>9</subCode>
+		<field name="mailIds" type="String"/>
+	</protocol>
+	<protocol name="DB_player_gift_list">
+		<mainCode>game_db</mainCode>
+		<subCode>10</subCode>
+		<field name="serverId" type="int"/>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="DB_player_gift_change">
+		<mainCode>game_db</mainCode>
+		<subCode>11</subCode>
+		<field name="uuid" type="String"/>
+		<field name="id" type="int"/>
+		<field name="count" type="int"/>
 	</protocol>
 	
 	
@@ -126,7 +1097,21 @@
 	<mainCode name="player_data_login">6</mainCode>
 	<mainCode name="hall">7</mainCode>
 	<mainCode name="laba">8</mainCode>
+	<mainCode name="luckyWheel">9</mainCode>
+	<mainCode name="blackA">10</mainCode>
+	<mainCode name="niuniu">11</mainCode>
+	<mainCode name="mahjong">12</mainCode>
+	<mainCode name="fruit">13</mainCode>
 	
+	<mainCode name="mail">15</mainCode>
+	<mainCode name="chat">16</mainCode>
+	<mainCode name="test">70</mainCode>
+	<mainCode name="heart">80</mainCode>
+	<mainCode name="game_db">50</mainCode>
+	<mainCode name="login_db">51</mainCode>
+	
+	
+	<mainCode name="texas">15</mainCode>
 	
 	<!-- 以下是常量定义 -->
 	<const name="l2g_login_opt_suc">1</const>

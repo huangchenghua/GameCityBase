@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  *
  * Created on 2014-1-11 上午11:30:36 by sunzhenchao mychaoyue2011@163.com
  */
-public class DelayCache<K, V> {
+public class DelayCache<K, V extends TimeUpItem> {
 
     public ConcurrentHashMap<K, V> map = new ConcurrentHashMap<K, V>();
     public DelayQueue<DelayedItem<K>> queue = new DelayQueue<DelayedItem<K>>();
@@ -37,6 +37,12 @@ public class DelayCache<K, V> {
         }
         queue.put(tmpItem);
     }
+	
+	public V remove(K k){
+		if(k!=null)
+			return map.remove(k);
+		return null;
+	}
     
 	public V getV(K key){
 		return map.get(key);
@@ -58,8 +64,10 @@ public class DelayCache<K, V> {
         	try {
         		DelayedItem<K> delayedItem = queue.take();
                 if (delayedItem != null) {
-                    map.remove(delayedItem.getT());
-                    System.out.println(System.currentTimeMillis()+" remove "+delayedItem.getT() +" from cache");
+                	TimeUpItem item = map.remove(delayedItem.getT());
+                	if(item!=null)
+                		item.onTimeUp();
+//                    System.out.println(System.currentTimeMillis()+" remove "+delayedItem.getT() +" from cache");
                 }
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -69,33 +77,33 @@ public class DelayCache<K, V> {
     }
     
     
-    public static void main(String[] args) throws InterruptedException {
-        
-        final DelayCache<String, Integer> cache = new DelayCache<String, Integer>();
-        
-        Thread t=new Thread(){
-        	@Override
-        	public void run() {
-        		int cacheNumber = 4;
-        		for (int i = 0; i < cacheNumber; i++) {
-                    long liveTime = 5*1000;
-//                    System.out.println(i+"  "+liveTime);
-                    cache.put(i+"", i, liveTime);
-                    
-                    try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-                }
-        	}
-        };
-        
-        t.start();
-
-        
-        System.out.println();
-    }
+//    public static void main(String[] args) throws InterruptedException {
+//        
+//        final DelayCache<String, Integer> cache = new DelayCache<String, Integer>();
+//        
+//        Thread t=new Thread(){
+//        	@Override
+//        	public void run() {
+//        		int cacheNumber = 4;
+//        		for (int i = 0; i < cacheNumber; i++) {
+//                    long liveTime = 5*1000;
+////                    System.out.println(i+"  "+liveTime);
+//                    cache.put(i+"", i, liveTime);
+//                    
+//                    try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//                }
+//        	}
+//        };
+//        
+//        t.start();
+//
+//        
+//        System.out.println();
+//    }
 
 }
 
@@ -107,7 +115,7 @@ class DelayedItem<T> implements Delayed{
     public DelayedItem(T t,long delay){
         this.setT(t);
         expire = System.currentTimeMillis() + delay;
-        System.out.println(t+"    "+expire);
+//        System.out.println(t+"    "+expire);
     }
     
     @Override
