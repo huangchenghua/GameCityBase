@@ -38,8 +38,77 @@ public class Player extends TimeUpItem{
 	private boolean online;
 	private int roomId;
 	private String tableId;
+	private boolean frozen;
+	private boolean silent;
+	private String lastSignDate;
+	private int signDays;
+	private boolean signed;
+	private int exp;
 	
+	private byte m_nAlmsCnt;
+	private String m_strAlmsTime;
+	private int[] heads;
 	
+	public int[] getHeads() {
+		return heads;
+	}
+
+	public void setHeads(int[] heads) {
+		this.heads = heads;
+	}
+
+	public byte getAlmsCnt() {
+		return m_nAlmsCnt;
+	}
+	
+	public String getAlmsTime() {
+		return m_strAlmsTime;
+	}
+	
+	public void setAlmsCnt(byte nAlmsCnt) {
+		m_nAlmsCnt = nAlmsCnt;
+	}
+	
+	public void setAlmsTime(String strAlmsTime) {
+		m_strAlmsTime = strAlmsTime;
+	}
+	
+	public int getExp() {
+		return exp;
+	}
+	public void setExp(int exp) {
+		this.exp = exp;
+	}
+	public boolean isSigned() {
+		return signed;
+	}
+	public void setSigned(boolean signed) {
+		this.signed = signed;
+	}
+	public String getLastSignDate() {
+		return lastSignDate;
+	}
+	public void setLastSignDate(String lastSignDate) {
+		this.lastSignDate = lastSignDate;
+	}
+	public int getSignDays() {
+		return signDays;
+	}
+	public void setSignDays(int signDays) {
+		this.signDays = signDays;
+	}
+	public boolean isFrozen() {
+		return frozen;
+	}
+	public void setFrozen(boolean frozen) {
+		this.frozen = frozen;
+	}
+	public boolean isSilent() {
+		return silent;
+	}
+	public void setSilent(boolean silent) {
+		this.silent = silent;
+	}
 	public byte getSex() {
 		return sex;
 	}
@@ -165,21 +234,21 @@ public class Player extends TimeUpItem{
 		this.vip = vip;
 	}
 	
-	public static Player createPlayer(String uuid){
-		Player player = new Player();
-		player.setUuid(uuid);
-		player.setName("游客");
-		player.setSex((byte) 2);
-		player.setCoin(80000);
-		player.setHead(0);
-		player.setLvl(1);
-		player.setFinance(0);
-		player.setVip(0);
-		player.setCharm(0);
-		player.setSign("");
-		player.setCharge_total(0);
-		return player;
-	}
+//	public static Player createPlayer(String uuid){
+//		Player player = new Player();
+//		player.setUuid(uuid);
+//		player.setName("游客");
+//		player.setSex((byte) 2);
+//		player.setCoin(80000);
+//		player.setHead(0);
+//		player.setLvl(1);
+//		player.setFinance(0);
+//		player.setVip(0);
+//		player.setCharm(0);
+//		player.setSign("");
+//		player.setCharge_total(0);
+//		return player;
+//	}
 	
 	public void write(JSONObject json){
 		try {

@@ -157,6 +157,10 @@ public class SensitiveWordInit {
         Set<String> set = filter.getSensitiveWord(string, 0);  
         long endTime = System.currentTimeMillis();  
         System.out.println("语句中包含敏感词的个数为：" + set.size() + "。包含：" + set);  
-        System.out.println("总共消耗时间为：" + (endTime - beginTime));  
+        System.out.println("总共消耗时间为：" + (endTime - beginTime)); 
+        
+        
+        String _str = filter.replaceSensitiveWord(string, 0, "*");
+        System.out.println(_str);
     } 
 }

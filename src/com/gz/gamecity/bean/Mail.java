@@ -1,6 +1,9 @@
 package com.gz.gamecity.bean;
 
 public class Mail {
+	public static final int MAIL_TYPE_FRIEND=0;
+	public static final int MAIL_TYPE_SYSTEM=1;
+	
 	private String title;
 	private String content;
 	private String attachments;
@@ -9,6 +12,15 @@ public class Mail {
 	private String mailId;
 	private boolean read;
 	private boolean taken;
+	private int mail_type;
+	private String sender;
+	
+	public int getMail_type() {
+		return mail_type;
+	}
+	public void setMail_type(int mail_type) {
+		this.mail_type = mail_type;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -56,6 +68,12 @@ public class Mail {
 	}
 	public void setTaken(boolean taken) {
 		this.taken = taken;
+	}
+	public String getSender() {
+		return sender;
+	}
+	public void setSender(String sender) {
+		this.sender = sender;
 	}
 	
 }

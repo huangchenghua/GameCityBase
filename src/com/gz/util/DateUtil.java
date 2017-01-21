@@ -92,6 +92,18 @@ public class DateUtil {
 
 		return c;
 	}
+	
+	public static Calendar parse(String dateTimeString,String format) {
+		DateFormat df = new SimpleDateFormat(format);
+		Calendar c = Calendar.getInstance();
+		try {
+			c.setTime(df.parse(dateTimeString));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return c;
+	}
 
 	/**
 	 * 两个日期之差
@@ -100,7 +112,7 @@ public class DateUtil {
 	 * @param toDate
 	 * @return
 	 */
-	public static long dateDays(String date1, String date2) {
+	public static long dateDays(String date1, String date2) throws Exception {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		long myTime, myTime2, days = 0;
 		Date aDate2, aDate;
@@ -117,7 +129,8 @@ public class DateUtil {
 				days = (myTime2 - myTime) / (60 * 60 * 24);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			throw e;
 		}
 
 		return days;
@@ -176,6 +189,35 @@ public class DateUtil {
 			nDays = 365;
 		}
 		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, month - 1);
+		c.set(Calendar.DAY_OF_MONTH, nDays);
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
+		String timeStr = nowDate.format(c.getTime());
+		return timeStr;
+	}
+	
+	/**
+	 * 返回今天之前几天的日期字符串(当前是2007年3月27日，nDays=5,将返回2007-03-22)
+	 * 
+	 * @param nDays
+	 *            前几天(不大于365,不小于0)
+	 * @return
+	 */
+	public static String getBeforeToday(int year, int month, int nDays) {
+		if (month < 1 ) {
+			month = 1;
+		}
+		if (month > 12 ) {
+			month = 12;
+		}
+		if (nDays < 0) {
+			nDays = 0;
+		}
+		if (nDays > 365) {
+			nDays = 365;
+		}
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month - 1);
 		c.set(Calendar.DAY_OF_MONTH, nDays);
 		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -245,6 +287,72 @@ public class DateUtil {
 	//	c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
 		c.set(Calendar.DAY_OF_MONTH,0);
 		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
+		String timeStr = nowDate.format(c.getTime());
+		return timeStr;
+	}
+	
+	/**
+	 * 获取某月的第一天
+	 * @param date
+	 * @return 
+	 */
+	public static String getCurMonthFirstDay(int year, int month) {
+		Calendar c = Calendar.getInstance();
+		// 小于1情况下返回当前月的第一天
+		if (month < 1 || month > 12) {
+			month = c.get(Calendar.MONTH) + 1;
+		}
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month - 1);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
+		String timeStr = nowDate.format(c.getTime());
+		return timeStr;
+	}
+	
+	/**
+	 * 获取某月的最后一天或者当前月的前一天
+	 * @param date
+	 * @return 
+	 */
+	public static String getCurMonthLastDay(int year, int month) {
+		Calendar c = Calendar.getInstance();
+		int curmonth = c.get(Calendar.MONTH) + 1;
+		int curyear = c.get(Calendar.YEAR);
+		// 小于1情况下返回当前月的最后一天
+		if (month < 1 || month > 12) {
+			month = c.get(Calendar.MONTH) + 1;
+		}
+		if (curmonth == month && year == curyear) {
+			// 查看是否是当月的第一天
+			if (isFirstDayOfMonth()) {
+				return getCurMonthFirstDay(year, month);
+			}
+			return getBeforeToday(1);
+		}
+		// 获取某月的下一个月的第一天-1
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month);
+	//	c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+		c.set(Calendar.DAY_OF_MONTH,0);
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
+		String timeStr = nowDate.format(c.getTime());
+		return timeStr;
+	}
+	
+	/**
+	 * 返回某月的年月日期 格式200906
+	 * @param month
+	 * @return 
+	 */
+	public static String getYearMonth(int year, int month) {
+		Calendar c = Calendar.getInstance();
+		if (month < 1 || month > 12) {
+			month = c.get(Calendar.MONTH) + 1;
+		}
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month - 1);
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyyMM");
 		String timeStr = nowDate.format(c.getTime());
 		return timeStr;
 	}
@@ -441,19 +549,19 @@ public class DateUtil {
 	}
 	
 	/**
-	 * 格式化时间
-	 * 
-	 * @param date
-	 * @return
+	 * 截取字符串
+	 * @param num
 	 */
-	public static String parseDate(String date,String format) {
-		SimpleDateFormat df = new SimpleDateFormat(format);
-		try {
-			return df.format(df.parse(date));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return date;
+	public static String interceptStr(String num){
+		
+		int i=num.indexOf('.');
+		
+		int re=num.substring(0,i).length()+5;
+		
+		num=num.substring(0,re);
+		
+		return num;
+		
 	}
 	
 	/**
@@ -516,13 +624,12 @@ public class DateUtil {
 		}
 		return intReturn;
 	}
-	public static void main(String[] args) {
-		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			System.out.println(dateDiff("M",nowDate.parse("2009-07-12"),nowDate.parse("2009-08-01")));
-		} catch (ParseException e) {
-			// TODO 自动生成 catch 块
-			e.printStackTrace();
-		}
+	
+	public static Calendar getMailCleanTime(){
+		Calendar c = DateUtil.parse(DateUtil.getBeforeToday(31),"yyyy-MM-dd");
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		return c;
 	}
 }

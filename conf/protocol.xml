@@ -48,10 +48,17 @@
 		<field name="charge_total" type="int"/>
 		<field name="sex" type="byte"/>
 		<field name="lvl" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="finance" type="int"/>
 		<field name="sign" type="String"/>
 		<field name="charm" type="int"/>
 		<field name="timestamp" type="long"/><!-- 服务器当前时间 -->
+		<field name="frozen" type="boolean"/>
+		<field name="silent" type="boolean"/>
+		<field name="lastSignDate" type="String"/>
+		<field name="signDays" type="int"/>
+		<field name="signed" type="boolean"/>
+		<field name="heads" type="int" array="true"/>
 	</protocol>
 	<!-- 客户端直接登录游戏服，测试游戏逻辑专用 -->
 	<protocol name="c2g_test_login">
@@ -445,6 +452,8 @@
 	<protocol name="g2c_texas_choose_lv">
 		<mainCode>texas</mainCode>
 		<subCode>4</subCode>
+		<field name="lv" type="int"/>
+		<field name="is_reconnect" type="boolean"/>
 	</protocol>
 	<protocol name="g2c_texas_table_info">
 		<mainCode>texas</mainCode>
@@ -547,7 +556,11 @@
 		<subCode>17</subCode>
 		<field name="seat_index" type="int"/>
 	</protocol>
-	
+	<protocol name="c2g_texas_show_card">
+		<mainCode>texas</mainCode>
+		<subCode>18</subCode>
+		<field name="is_show" type="boolean"/>
+	</protocol>
 	
 	
 	
@@ -653,9 +666,16 @@
 		<field name="charge_total" type="int"/>
 		<field name="sex" type="byte"/>
 		<field name="lvl" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="finance" type="int"/>
 		<field name="sign" type="String"/>
 		<field name="charm" type="int"/>
+		<field name="frozen" type="boolean"/>
+		<field name="silent" type="boolean"/>
+		<field name="lastSignDate" type="String"/>
+		<field name="signDays" type="int"/>
+		<field name="signed" type="boolean"/>
+		<field name="heads" type="int" array="true"/>
 	</protocol>
 	
 	<!-- 请求收到的礼物列表 -->
@@ -667,7 +687,6 @@
 	<protocol name="g2c_player_gift_list">
 		<mainCode>player_data_game</mainCode>
 		<subCode>6</subCode>
-		<field name="id" type="int" array="true"/>
 		<field name="count" type="int" array="true"/>
 	</protocol>
 	
@@ -694,6 +713,37 @@
 			<field name="itemId" type="int"/>
 		</field>
 	</protocol>
+	<!-- 请求签到礼物列表 -->
+	<protocol name="c2g_req_signin_reward">
+		<mainCode>hall</mainCode>
+		<subCode>3</subCode>
+	</protocol>
+	<protocol name="g2c_req_signin_reward">
+		<mainCode>hall</mainCode>
+		<subCode>4</subCode>
+		<field name="reward_info" type="obj" array="true">
+			<field name="vip" type="int"/>
+			<field name="reward" type="int" array="true"/>
+		</field>
+	</protocol>
+	<protocol name="c2g_signin">
+		<mainCode>hall</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	<protocol name="g2c_signin">
+		<mainCode>hall</mainCode>
+		<subCode>6</subCode>
+	</protocol>
+	<!-- 请求玩家已经拥有的头像 -->
+	<protocol name="c2g_buy_head">
+		<mainCode>hall</mainCode>
+		<subCode>7</subCode>
+		<field name="id"/>
+	</protocol>
+	<protocol name="g2c_buy_head">
+		<mainCode>hall</mainCode>
+		<subCode>8</subCode>
+	</protocol>
 	
 	
 	<!-- 请求邮件列表 -->
@@ -713,6 +763,9 @@
 			<field name="read" type="boolean"/>
 			<field name="taken" type="boolean"/>
 			<field name="attachments" type="String" />
+			<field name="mail_type" type="int"/>
+			<field name="sender" type="String"/>
+			<field name="remain" type="long"/>
 		</field>
 	</protocol>
 	<!-- 新增邮件 -->
@@ -726,6 +779,9 @@
 		<field name="read" type="boolean"/>
 		<field name="taken" type="boolean"/>
 		<field name="attachments" type="String"/>
+		<field name="mail_type" type="int"/>
+		<field name="sender" type="String"/>
+		<field name="remain" type="long"/>
 	</protocol>
 	<!-- 打开邮件 -->
 	<protocol name="c2g_open_mail">
@@ -746,8 +802,84 @@
 		<field name="mailIds" type="String"/><!-- 用','分割 -->
 	</protocol>
 	
-	
-	
+	<!-- friend -->
+	<protocol name="c2g_friend_add">
+		<mainCode>friend</mainCode>
+		<subCode>1</subCode>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="g2c_friend_add">
+		<mainCode>friend</mainCode>
+		<subCode>2</subCode>
+		<field name="uuid_other" type="string"/>
+		<field name="is_succ" type="boolean"/>
+	</protocol>
+	<protocol name="c2g_friend_del">
+		<mainCode>friend</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="g2c_friend_del">
+		<mainCode>friend</mainCode>
+		<subCode>4</subCode>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="c2g_friend_list">
+		<mainCode>friend</mainCode>
+		<subCode>5</subCode>
+	</protocol>
+	<protocol name="g2c_friend_list">
+		<mainCode>friend</mainCode>
+		<subCode>6</subCode>
+		<field name="player_list" type="obj" array="true">
+			<field name="uuid" type="string"/>
+			<field name="lv" type="int"/>
+			<field name="name" type="string"/>
+			<field name="head" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="finance" type="int"/>
+			<field name="coin" type="long"/>
+		</field>
+	</protocol>
+	<protocol name="c2g_friend_other_info">
+		<mainCode>friend</mainCode>
+		<subCode>7</subCode>
+		<field name="name" type="string"/>
+	</protocol>
+	<protocol name="g2c_friend_other_info">
+		<mainCode>friend</mainCode>
+		<subCode>8</subCode>
+		<field name="uuid" type="string"/>
+		<field name="sex" type="byte"/>
+		<field name="lv" type="int"/>
+		<field name="name" type="string"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="coin" type="long"/>
+		<field name="charm" type="int"/>
+		<field name="sign" type="string"/>
+	</protocol>
+
+
+	<!-- 给他人送礼物 -->
+	<protocol name="c2g_senf_gift">
+		<mainCode>friend</mainCode>
+		<subCode>9</subCode>
+		<field name="target" type="String"/>
+		<field name="id" type="int"/>
+		<field name="count" type="int"/>
+	</protocol>
+	<protocol name="g2c_senf_gift">
+		<mainCode>friend</mainCode>
+		<subCode>10</subCode>
+	</protocol>
+
+	<!-- alms 低保金 -->
+	<protocol name="c2g_alms_enter_hall">
+		<mainCode>alms</mainCode>
+		<subCode>1</subCode>
+	</protocol>
 	
 	<!-- 请求充值 -->
 	<protocol name="c2g_test_charge">
@@ -755,7 +887,12 @@
 		<subCode>1</subCode>
 		<field name="coin" type="long"/>
 	</protocol>
-	
+	<!-- 请求发送测试邮件 -->
+	<protocol name="c2g_test_sendMail">
+		<mainCode>test</mainCode>
+		<subCode>2</subCode>
+		<field name="mail_type" type="int"/>
+	</protocol>
 	
 	
 	<!-- 聊天 -->
@@ -778,6 +915,7 @@
 		<field name="vip" type="int"/>
 		<field name="finance" type="int"/>
 	</protocol>
+	
 		
 	<!-- 以下是游戏服与登录服交互的协议 -->
 	<!-- 游戏服务器请求连接登录服务器 -->
@@ -812,9 +950,18 @@
 		<field name="charge_total" type="int"/>
 		<field name="sex" type="byte"/>
 		<field name="lvl" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="finance" type="int"/>
 		<field name="sign" type="String"/>
 		<field name="charm" type="int"/>
+		<field name="frozen" type="boolean"/>
+		<field name="silent" type="boolean"/>
+		<field name="lastSignDate" type="String"/>
+		<field name="signDays" type="int"/>
+		<field name="signed" type="boolean"/>
+		<field name="alms_cnt" type="byte"/>
+		<field name="alms_time" type="string"/>
+		<field name="heads" type="int" array="true"/>
 	</protocol>
 	
 	<protocol name="g2l_playerLogout">
@@ -852,9 +999,16 @@
 		<field name="charge_total" type="int"/>
 		<field name="sex" type="byte"/>
 		<field name="lvl" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="finance" type="int"/>
 		<field name="sign" type="String"/>
 		<field name="charm" type="int"/>
+		<field name="frozen" type="boolean"/>
+		<field name="silent" type="boolean"/>
+		<field name="lastSignDate" type="String"/>
+		<field name="signDays" type="int"/>
+		<field name="signed" type="boolean"/>
+		<field name="heads" type="int" array="true"/>
 	</protocol>
 	
 	<!-- 请求邮件列表 -->
@@ -876,6 +1030,9 @@
 			<field name="read" type="boolean"/>
 			<field name="taken" type="boolean"/>
 			<field name="attachments" type="String"/>
+			<field name="mail_type" type="int"/>
+			<field name="sender" type="String"/>
+			<field name="remain" type="long"/>
 		</field>
 	</protocol>
 	<!-- 新增邮件 -->
@@ -890,6 +1047,8 @@
 		<field name="read" type="boolean"/>
 		<field name="taken" type="boolean"/>
 		<field name="attachments" type="String"/>
+		<field name="mail_type" type="int"/>
+		<field name="sender" type="String"/>
 	</protocol>
 	<!-- 打开邮件 -->
 	<protocol name="g2l_open_mail">
@@ -904,36 +1063,140 @@
 		<field name="uuid"/>
 		<field name="mailId" type="String"/>
 	</protocol>
+	<!-- 领取附件 -->
+	<protocol name="l2g_take_mail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>9</subCode>
+		<field name="uuid"/>
+		<field name="attachments" type="String"/>
+	</protocol>
 	<!-- 删除邮件 -->
 	<protocol name="g2l_delete_mail">
 		<mainCode>player_data_login</mainCode>
-		<subCode>9</subCode>
+		<subCode>10</subCode>
 		<field name="mailIds" type="String"/>
 	</protocol>
 	
 	<protocol name="g2l_player_gift_list">
 		<mainCode>player_data_login</mainCode>
-		<subCode>10</subCode>
+		<subCode>11</subCode>
 		<field name="uuid" type="String"/>
 	</protocol>
 	
 	<protocol name="l2g_player_gift_list">
 		<mainCode>player_data_login</mainCode>
-		<subCode>11</subCode>
+		<subCode>12</subCode>
 		<field name="uuid" type="String"/>
-		<field name="id" type="int" array="true"/>
 		<field name="count" type="int" array="true"/>
 	</protocol>
 	
 	<protocol name="g2l_player_gift_change">
 		<mainCode>player_data_login</mainCode>
-		<subCode>12</subCode>
+		<subCode>13</subCode>
 		<field name="uuid" type="String"/>
 		<field name="id" type="int"/>
 		<field name="count" type="int"/>
 	</protocol>
 	
+	<protocol name="l2g_silent">
+		<mainCode>player_data_login</mainCode>
+		<subCode>14</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="l2g_gm_add_coin">
+		<mainCode>player_data_login</mainCode>
+		<subCode>15</subCode>
+		<field name="uuid" type="string"/>
+		<field name="coin" type="long"/>
+	</protocol>
 	
+	<!-- friend -->
+	<protocol name="g2l_friend_add">
+		<mainCode>player_data_login</mainCode>
+		<subCode>20</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid_my" type="string"/>
+		<field name="uuid_other" type="string"/>
+		<field name="date_time" type="string"/>
+	</protocol>
+	<protocol name="l2g_friend_add">
+		<mainCode>player_data_login</mainCode>
+		<subCode>21</subCode>
+		<field name="ret" type="int"/>
+		<field name="uuid_my" type="string"/>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="g2l_friend_del">
+		<mainCode>player_data_login</mainCode>
+		<subCode>22</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid" type="string"/>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="l2g_friend_del">
+		<mainCode>player_data_login</mainCode>
+		<subCode>23</subCode>
+		<field name="uuid" type="string"/>
+		<field name="ret" type="int"/>
+		<field name="uuid_other" type="string"/>
+	</protocol>
+	<protocol name="g2l_friend_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>24</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="l2g_friend_list">
+		<mainCode>player_data_login</mainCode>
+		<subCode>25</subCode>
+		<field name="uuid" type="string"/>
+		<field name="player_list" type="obj" array="true">
+			<field name="uuid" type="string"/>
+			<field name="lv" type="int"/>
+			<field name="name" type="string"/>
+			<field name="head" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="finance" type="int"/>
+			<field name="coin" type="long"/>
+		</field>
+	</protocol>
+
+	<protocol name="g2l_friend_other_info">
+		<mainCode>player_data_login</mainCode>
+		<subCode>26</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid_self" type="string"/>
+		<field name="name" type="string"/>
+	</protocol>
+	<protocol name="l2g_friend_other_info">
+		<mainCode>player_data_login</mainCode>
+		<subCode>27</subCode>
+		<field name="uuid_self" type="string"/>
+		<field name="uuid" type="string"/>
+		<field name="sex" type="byte"/>
+		<field name="lv" type="int"/>
+		<field name="name" type="string"/>
+		<field name="head" type="int"/>
+		<field name="vip" type="int"/>
+		<field name="finance" type="int"/>
+		<field name="coin" type="long"/>
+		<field name="charm" type="int"/>
+		<field name="sign" type="string"/>
+	</protocol>
+	
+	<protocol name="g2l_player_signin">
+		<mainCode>player_data_login</mainCode>
+		<subCode>27</subCode>
+		<field name="uuid" type="String"/>
+		<field name="date" type="String"/>
+		<field name="sign_days" type="int"/>
+	</protocol>
+	
+	<protocol name="l2g_unsilent">
+		<mainCode>player_data_login</mainCode>
+		<subCode>28</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
 	
 	
 	<!-- 以下是登录服内部协议 -->
@@ -1030,9 +1293,16 @@
 			<field name="charge_total" type="int"/>
 			<field name="sex" type="byte"/>
 			<field name="lvl" type="int"/>
+			<field name="exp" type="int"/>
 			<field name="finance" type="int"/>
 			<field name="sign" type="String"/>
 			<field name="charm" type="int"/>
+			<field name="frozen" type="boolean"/>
+			<field name="silent" type="boolean"/>
+			<field name="lastSignDate" type="String"/>
+			<field name="signDays" type="int"/>
+			<field name="signed" type="boolean"/>
+			<field name="heads" type="int" array="true"/>
 		</field>
 	</protocol>
 	
@@ -1054,6 +1324,8 @@
 		<field name="read" type="boolean"/>
 		<field name="taken" type="boolean"/>
 		<field name="attachments" type="String"/>
+		<field name="mail_type" type="int"/>
+		<field name="sender" type="String"/>
 	</protocol>
 	
 	<protocol name="DB_login_open_mail">
@@ -1064,6 +1336,7 @@
 	<protocol name="DB_login_take_mail">
 		<mainCode>game_db</mainCode>
 		<subCode>8</subCode>
+		<field name="serverId" type="int"/>
 		<field name="uuid" type="String"/>
 		<field name="mailId" type="String"/>
 	</protocol>
@@ -1087,6 +1360,93 @@
 	</protocol>
 	
 	
+	<protocol name="DB_friend_add">
+		<mainCode>game_db</mainCode>
+		<subCode>12</subCode>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="DB_friend_del">
+		<mainCode>game_db</mainCode>
+		<subCode>13</subCode>
+		<field name="uuid" type="string"/>
+		<field name="server_id" type="int"/>
+	</protocol>
+	<protocol name="DB_friend_list">
+		<mainCode>game_db</mainCode>
+		<subCode>14</subCode>
+		<field name="uuid" type="string"/>
+		<field name="server_id" type="int"/>
+	</protocol>
+	<protocol name="DB_friend_other_info">
+		<mainCode>game_db</mainCode>
+		<subCode>15</subCode>
+		<field name="uuid" type="string"/>
+		<field name="server_id" type="int"/>
+	</protocol>
+	
+	<protocol name="DB_search_player">
+		<mainCode>game_db</mainCode>
+		<subCode>16</subCode>
+		<field name="gm_uuid" type="String"/>
+		<field name="name" type="string"/>
+	</protocol>
+	<protocol name="DB_freeze">
+		<mainCode>game_db</mainCode>
+		<subCode>17</subCode>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="DB_silent">
+		<mainCode>game_db</mainCode>
+		<subCode>18</subCode>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="DB_unfreeze">
+		<mainCode>game_db</mainCode>
+		<subCode>19</subCode>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="DB_unsilent">
+		<mainCode>game_db</mainCode>
+		<subCode>20</subCode>
+		<field name="uuid" type="string"/>
+	</protocol>
+	<protocol name="DB_clean_mail">
+		<mainCode>game_db</mainCode>
+		<subCode>21</subCode>
+	</protocol>
+	<protocol name="DB_gm_add_coin">
+		<mainCode>game_db</mainCode>
+		<subCode>22</subCode>
+		<field name="uuid" type="string"/>
+		<field name="coin" type="long"/>
+	</protocol>
+	<protocol name="DB_player_signin">
+		<mainCode>game_db</mainCode>
+		<subCode>23</subCode>
+		<field name="uuid" type="String"/>
+		<field name="date" type="String"/>
+		<field name="sign_days" type="int"/>
+	</protocol>
+	<protocol name="DB_charge_record">
+		<mainCode>game_db</mainCode>
+		<subCode>24</subCode>
+		<field name="amount" type="int"/>
+		<field name="appId" type="String"/>
+		<field name="notifyParameters" type="String"/>
+		<field name="orderId" type="String"/>
+		<field name="payWay" type="String"/>
+		<field name="status" type="String"/>
+		<field name="uuid" type="String"/>
+		<field name="sign" type="String"/>
+	</protocol>
+	<protocol name="DB_req_charge_list">
+		<mainCode>game_db</mainCode>
+		<subCode>25</subCode>
+		<field name="gm_uuid" type="String"/>
+		<field name="uuid" type="String"/>
+	</protocol>
+	
+	
 	
 	<!-- 以下是mainCode定义 -->
 	<mainCode name="gameServer_login">1</mainCode>
@@ -1102,20 +1462,134 @@
 	<mainCode name="niuniu">11</mainCode>
 	<mainCode name="mahjong">12</mainCode>
 	<mainCode name="fruit">13</mainCode>
-	
-	<mainCode name="mail">15</mainCode>
+	<mainCode name="mail">14</mainCode>
+	<mainCode name="texas">15</mainCode>
 	<mainCode name="chat">16</mainCode>
+	<mainCode name="friend">17</mainCode>
+	<mainCode name="alms">18</mainCode>
+	
+	
 	<mainCode name="test">70</mainCode>
 	<mainCode name="heart">80</mainCode>
 	<mainCode name="game_db">50</mainCode>
 	<mainCode name="login_db">51</mainCode>
+	<mainCode name="gm_tool">66</mainCode>
 	
 	
-	<mainCode name="texas">15</mainCode>
+
 	
 	<!-- 以下是常量定义 -->
 	<const name="l2g_login_opt_suc">1</const>
 	
-	
-	
+	<!-- GM协议 -->
+	<protocol name="Gm2l_login">
+		<mainCode>gm_tool</mainCode>
+		<subCode>1</subCode>
+		<field name="name" type="String"/>
+		<field name="password" type="String"/>
+	</protocol>
+	<protocol name="L2gm_login">
+		<mainCode>gm_tool</mainCode>
+		<subCode>2</subCode>
+	</protocol>
+	<!-- 请求服务器人数 -->
+	<protocol name="Gm2l_player_count">
+		<mainCode>gm_tool</mainCode>
+		<subCode>3</subCode>
+		<field name="serverId" type="int"/>
+	</protocol>
+	<protocol name="L2gm_player_count">
+		<mainCode>gm_tool</mainCode>
+		<subCode>4</subCode>
+		<field name="count" type="int"/>
+	</protocol>
+	<!-- 查询玩家 -->
+	<protocol name="Gm2l_search_player">
+		<mainCode>gm_tool</mainCode>
+		<subCode>5</subCode>
+		<field name="name"></field>
+	</protocol>
+	<protocol name="L2gm_search_player">
+		<mainCode>gm_tool</mainCode>
+		<subCode>6</subCode>
+		<field name="player_info" type="obj" array="true">
+			<field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="coin" type="long"/>
+			<field name="head" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="charge_total" type="int"/>
+			<field name="sex" type="byte"/>
+			<field name="lvl" type="int"/>
+			<field name="finance" type="int"/>
+			<field name="sign" type="String"/>
+			<field name="charm" type="int"/>
+			<field name="frozen" type="boolean"/>
+			<field name="silent" type="boolean"/>
+			<field name="lastSignDate" type="String"/>
+			<field name="signDays" type="int"/>
+		</field>
+	</protocol>
+	<protocol name="Gm2l_freeze">
+		<mainCode>gm_tool</mainCode>
+		<subCode>7</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="L2gm_freeze">
+		<mainCode>gm_tool</mainCode>
+		<subCode>8</subCode>
+	</protocol>
+	<protocol name="Gm2l_silent">
+		<mainCode>gm_tool</mainCode>
+		<subCode>9</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="L2gm_silent">
+		<mainCode>gm_tool</mainCode>
+		<subCode>10</subCode>
+	</protocol>
+	<protocol name="Gm2l_add_coin">
+		<mainCode>gm_tool</mainCode>
+		<subCode>11</subCode>
+		<field name="uuid" type="String"/>
+		<field name="coin" type="long"/>
+	</protocol>
+	<protocol name="L2gm_add_coin">
+		<mainCode>gm_tool</mainCode>
+		<subCode>12</subCode>
+	</protocol>
+	<protocol name="Gm2l_req_charge">
+		<mainCode>gm_tool</mainCode>
+		<subCode>13</subCode>
+		<field name="uuid"/>
+	</protocol>
+	<protocol name="L2gm_req_charge">
+		<mainCode>gm_tool</mainCode>
+		<subCode>14</subCode>
+		<field name="list" type="obj" array="true">
+			<field name="amount" type="int"/>
+			<field name="orderId" type="String"/>
+			<field name="payWay" type="String"/>
+			<field name="status" type="String"/>
+			<field name="charge_time" type="String"/>
+		</field>
+	</protocol>
+	<protocol name="Gm2l_unfreeze">
+		<mainCode>gm_tool</mainCode>
+		<subCode>15</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="L2gm_unfreeze">
+		<mainCode>gm_tool</mainCode>
+		<subCode>16</subCode>
+	</protocol>
+	<protocol name="Gm2l_unsilent">
+		<mainCode>gm_tool</mainCode>
+		<subCode>17</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="L2gm_unsilent">
+		<mainCode>gm_tool</mainCode>
+		<subCode>18</subCode>
+	</protocol>
 </protocols>
