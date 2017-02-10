@@ -106,6 +106,7 @@
 		<mainCode>laba</mainCode>
 		<subCode>4</subCode>
 		<field name="option" type="int"/><!-- 返回客户端猜中哪个，0表示没中 -->
+		<field name="reward" type="long"/>
 	</protocol>
 	<!-- 拉霸猜金币 -->
 	<protocol name="c2g_laba_guess">
@@ -224,6 +225,8 @@
 	<protocol name="g2c_luckyWheel_reward">
 		<mainCode>luckyWheel</mainCode>
 		<subCode>4</subCode>
+		<field name="id" type="int"/>
+		<field name ="profit" type="long"/>
 		<field name="reward" type="long"/>
 		<field name="result" type="int"/> <!-- 这个字段表示中了那个 -->
 	</protocol>
@@ -624,8 +627,11 @@
 		<subCode>9</subCode>
 		<field name="remain_timestamp" type="long"/> <!-- 剩余操作时间 -->
 	</protocol>
-	
-	
+	<!-- 重复下注 -->
+	<protocol name="c2g_fruit_rebet">
+		<mainCode>fruit</mainCode>
+		<subCode>10</subCode>
+	</protocol>
 	
 	
 	
@@ -744,6 +750,16 @@
 		<mainCode>hall</mainCode>
 		<subCode>8</subCode>
 	</protocol>
+	<!-- 请求公告  -->
+	<protocol name="c2g_gonggao">
+		<mainCode>hall</mainCode>
+		<subCode>9</subCode>
+	</protocol>
+	<protocol name="g2c_gonggao">
+		<mainCode>hall</mainCode>
+		<subCode>10</subCode>
+		<field name="content" type="String"/>
+	</protocol>
 	
 	
 	<!-- 请求邮件列表 -->
@@ -852,6 +868,7 @@
 		<field name="uuid" type="string"/>
 		<field name="sex" type="byte"/>
 		<field name="lv" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="name" type="string"/>
 		<field name="head" type="int"/>
 		<field name="vip" type="int"/>
@@ -880,7 +897,45 @@
 		<mainCode>alms</mainCode>
 		<subCode>1</subCode>
 	</protocol>
+	<protocol name="g2c_alms_show_panel">
+		<mainCode>alms</mainCode>
+		<subCode>2</subCode>
+		<field name="left_cnt" type="int"/>
+		<field name="coin_reward" type="long"/>
+		<field name="total_cnt" type="int"/> 
+		<field name="req_coin" type="long"/>
+	</protocol>
+	<protocol name="c2g_alms_get_reward">
+		<mainCode>alms</mainCode>
+		<subCode>3</subCode>
+	</protocol>
+	<protocol name="g2c_alms_get_reward">
+		<mainCode>alms</mainCode>
+		<subCode>4</subCode>
+	</protocol>
+	<!-- charts 排行榜 -->
+	<protocol name="c2g_charts_get_list">
+		<mainCode>alms</mainCode>
+		<subCode>5</subCode>
+		<field name="charts_type" type="int"/>
+	</protocol>
 	
+	<protocol name="g2c_charts_get_list">
+		<mainCode>alms</mainCode>
+		<subCode>6</subCode>
+		<field name="charts_type" type="int"/>
+		<field name="player_list" type="obj" array="true" >
+			<field name="rank" type="int"/>
+			<field name="value" type="long"/>
+			<field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="sex" type="byte"/>
+			<field name="head" type="int"/>
+			<field name="lvl" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="finance" type="int"/>
+		</field>
+	</protocol>
 	<!-- 请求充值 -->
 	<protocol name="c2g_test_charge">
 		<mainCode>test</mainCode>
@@ -901,6 +956,7 @@
 	    <mainCode>chat</mainCode>
 	    <subCode>1</subCode>
 	    <field name="revMsg" type="string"/>
+	    <field name="horn" type="boolean"/>
 	</protocol>
 	
 	<!-- 服务器发送聊天信息 -->
@@ -914,8 +970,14 @@
 		<field name="lvl" type="int"/>
 		<field name="vip" type="int"/>
 		<field name="finance" type="int"/>
+		<field name="horn" type="boolean"/>
 	</protocol>
 	
+	<protocol name="g2c_system_msg">
+		<mainCode>chat</mainCode>
+		<subCode>3</subCode>
+		<field name="revMsg" type="string"/>
+	</protocol>
 		
 	<!-- 以下是游戏服与登录服交互的协议 -->
 	<!-- 游戏服务器请求连接登录服务器 -->
@@ -1009,6 +1071,9 @@
 		<field name="signDays" type="int"/>
 		<field name="signed" type="boolean"/>
 		<field name="heads" type="int" array="true"/>
+		<field name="alms_cnt" type="byte"/>
+		<field name="alms_time" type="string"/>
+
 	</protocol>
 	
 	<!-- 请求邮件列表 -->
@@ -1175,6 +1240,7 @@
 		<field name="uuid" type="string"/>
 		<field name="sex" type="byte"/>
 		<field name="lv" type="int"/>
+		<field name="exp" type="int"/>
 		<field name="name" type="string"/>
 		<field name="head" type="int"/>
 		<field name="vip" type="int"/>
@@ -1196,6 +1262,52 @@
 		<mainCode>player_data_login</mainCode>
 		<subCode>28</subCode>
 		<field name="uuid" type="String"/>
+	</protocol>
+	<!-- 登录服发送邮件 -->
+	<protocol name="l2g_sendMail">
+		<mainCode>player_data_login</mainCode>
+		<subCode>29</subCode>
+		<field name="uuid" type="String"/>
+		<field name="title" type="String"/>
+		<field name="content" type="String"/>
+		<field name="attachments" type="String"/>
+	</protocol>
+	<protocol name="l2g_sendGameNotice">
+		<mainCode>player_data_login</mainCode>
+		<subCode>30</subCode>
+		<field name="content" type="String"/>
+	</protocol>
+	<protocol name="l2g_player_charge">
+		<mainCode>player_data_login</mainCode>
+		<subCode>31</subCode>
+		<field name="uuid" type="String"/>
+		<field name="coin" type="long"/>
+	</protocol>
+	
+	<protocol name="g2l_charts_get_list">
+		<mainCode>charts</mainCode>
+		<subCode>1</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid_self" type="String"/>
+		<field name="charts_type" type="int"/>
+	</protocol>
+	<protocol name="l2g_charts_get_list">
+		<mainCode>charts</mainCode>
+		<subCode>2</subCode>
+		<field name="server_id" type="int"/>
+		<field name="uuid_self" type="String"/>
+		<field name="charts_type" type="int"/>
+		<field name="player_list" type="obj" array="true" >
+			<field name="rank" type="int"/>
+			<field name="value" type="long"/>
+			<field name="uuid" type="String"/>
+			<field name="name" type="String"/>
+			<field name="sex" type="byte"/>
+			<field name="head" type="int"/>
+			<field name="lvl" type="int"/>
+			<field name="vip" type="int"/>
+			<field name="finance" type="int"/>
+		</field>
 	</protocol>
 	
 	
@@ -1249,6 +1361,11 @@
 		<field name="tableId" type="string"/>
 		<field name="seat_index" type="int"/>
 		<field name="round" type="int"/>
+	</protocol>
+	
+	<protocol name="inner_login_charts_update">
+		<mainCode>charts</mainCode>
+		<subCode>101</subCode>
 	</protocol>
 	
 	
@@ -1445,6 +1562,31 @@
 		<field name="gm_uuid" type="String"/>
 		<field name="uuid" type="String"/>
 	</protocol>
+	<protocol name="DB_search_frozen_player">
+		<mainCode>game_db</mainCode>
+		<subCode>26</subCode>
+		<field name="gm_uuid"/>
+	</protocol>
+	<protocol name="DB_search_silent_player">
+		<mainCode>game_db</mainCode>
+		<subCode>27</subCode>
+		<field name="gm_uuid"/>
+	</protocol>
+	<protocol name="DB_charts_update_record">
+		<mainCode>game_db</mainCode>
+		<subCode>28</subCode>
+		<field name="time" type="int"/>
+		<field name="uuid" type="String"/>
+		<field name="column_name" type="String"/>
+		<field name="column_value" type="long"/>
+	</protocol>
+	<protocol name="DB_player_charge">
+		<mainCode>game_db</mainCode>
+		<subCode>29</subCode>
+		<field name="uuid" type="String"/>
+		<field name="coin" type="long"/>
+		<field name="amount" type="long"/>
+	</protocol>
 	
 	
 	
@@ -1467,6 +1609,7 @@
 	<mainCode name="chat">16</mainCode>
 	<mainCode name="friend">17</mainCode>
 	<mainCode name="alms">18</mainCode>
+	<mainCode name="charts">19</mainCode>
 	
 	
 	<mainCode name="test">70</mainCode>
@@ -1591,5 +1734,50 @@
 	<protocol name="L2gm_unsilent">
 		<mainCode>gm_tool</mainCode>
 		<subCode>18</subCode>
+	</protocol>
+	<protocol name="Gm2l_search_frozen_player">
+		<mainCode>gm_tool</mainCode>
+		<subCode>19</subCode>
+	</protocol>
+	<protocol name="Gm2l_search_silent_player">
+		<mainCode>gm_tool</mainCode>
+		<subCode>20</subCode>
+	</protocol>
+	<protocol name="Gm2l_send_game_notice">
+		<mainCode>gm_tool</mainCode>
+		<subCode>21</subCode>
+		<field name="content" type="String"/>
+		<field name="startTime" type="String"/><!-- 格式：2016-02-06 08:03:00 -->
+		<field name="endTime" type="String"/><!-- 格式：2016-02-06 08:03:00 -->
+		<field name="interval" type="int"/><!-- 间隔时间，秒 -->
+	</protocol>
+	<protocol name="L2gm_send_game_notice">
+		<mainCode>gm_tool</mainCode>
+		<subCode>22</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="Gm2l_game_notice_list">
+		<mainCode>gm_tool</mainCode>
+		<subCode>23</subCode>
+	</protocol>
+	<protocol name="L2gm_game_notice_list">
+		<mainCode>gm_tool</mainCode>
+		<subCode>24</subCode>
+		<field name="list" type="obj" array="true">
+			<field name="uuid" type="String"/>
+			<field name="content" type="String"/>
+			<field name="startTime" type="String"/><!-- 格式：2016-02-06 08:03:00 -->
+			<field name="endTime" type="String"/><!-- 格式：2016-02-06 08:03:00 -->
+			<field name="interval" type="long"/><!-- 间隔时间，秒 -->
+		</field>
+	</protocol>
+	<protocol name="Gm2l_del_game_notice">
+		<mainCode>gm_tool</mainCode>
+		<subCode>25</subCode>
+		<field name="uuid" type="String"/>
+	</protocol>
+	<protocol name="L2gm_del_game_notice">
+		<mainCode>gm_tool</mainCode>
+		<subCode>26</subCode>
 	</protocol>
 </protocols>

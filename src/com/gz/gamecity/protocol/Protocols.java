@@ -104,6 +104,7 @@ public class Protocols{
 		public static final int mainCode_value = MainCode.LABA;
 		public static final int subCode_value = 4;
 		public static final String OPTION = "option";
+		public static final String REWARD = "reward";
 
 	}
 	public static final class C2g_laba_guess{
@@ -214,6 +215,8 @@ public class Protocols{
 	public static final class G2c_luckyWheel_reward{
 		public static final int mainCode_value = MainCode.LUCKYWHEEL;
 		public static final int subCode_value = 4;
+		public static final String ID = "id";
+		public static final String PROFIT = "profit";
 		public static final String REWARD = "reward";
 		public static final String RESULT = "result";
 
@@ -648,6 +651,11 @@ public class Protocols{
 		public static final String REMAIN_TIMESTAMP = "remain_timestamp";
 
 	}
+	public static final class C2g_fruit_rebet{
+		public static final int mainCode_value = MainCode.FRUIT;
+		public static final int subCode_value = 10;
+
+	}
 	public static final class C2g_heart_ping{
 		public static final int mainCode_value = MainCode.HEART;
 		public static final int subCode_value = 1;
@@ -767,6 +775,17 @@ public class Protocols{
 		public static final int subCode_value = 8;
 
 	}
+	public static final class C2g_gonggao{
+		public static final int mainCode_value = MainCode.HALL;
+		public static final int subCode_value = 9;
+
+	}
+	public static final class G2c_gonggao{
+		public static final int mainCode_value = MainCode.HALL;
+		public static final int subCode_value = 10;
+		public static final String CONTENT = "content";
+
+	}
 	public static final class C2g_mail_list{
 		public static final int mainCode_value = MainCode.MAIL;
 		public static final int subCode_value = 1;
@@ -882,6 +901,7 @@ public class Protocols{
 		public static final String UUID = "uuid";
 		public static final String SEX = "sex";
 		public static final String LV = "lv";
+		public static final String EXP = "exp";
 		public static final String NAME = "name";
 		public static final String HEAD = "head";
 		public static final String VIP = "vip";
@@ -909,6 +929,50 @@ public class Protocols{
 		public static final int subCode_value = 1;
 
 	}
+	public static final class G2c_alms_show_panel{
+		public static final int mainCode_value = MainCode.ALMS;
+		public static final int subCode_value = 2;
+		public static final String LEFT_CNT = "left_cnt";
+		public static final String COIN_REWARD = "coin_reward";
+		public static final String TOTAL_CNT = "total_cnt";
+		public static final String REQ_COIN = "req_coin";
+
+	}
+	public static final class C2g_alms_get_reward{
+		public static final int mainCode_value = MainCode.ALMS;
+		public static final int subCode_value = 3;
+
+	}
+	public static final class G2c_alms_get_reward{
+		public static final int mainCode_value = MainCode.ALMS;
+		public static final int subCode_value = 4;
+
+	}
+	public static final class C2g_charts_get_list{
+		public static final int mainCode_value = MainCode.ALMS;
+		public static final int subCode_value = 5;
+		public static final String CHARTS_TYPE = "charts_type";
+
+	}
+	public static final class G2c_charts_get_list{
+		public static final int mainCode_value = MainCode.ALMS;
+		public static final int subCode_value = 6;
+		public static final String CHARTS_TYPE = "charts_type";
+		public static final String PLAYER_LIST = "player_list";
+
+		public static final class Player_list{
+			public static final String RANK = "rank";
+			public static final String VALUE = "value";
+			public static final String UUID = "uuid";
+			public static final String NAME = "name";
+			public static final String SEX = "sex";
+			public static final String HEAD = "head";
+			public static final String LVL = "lvl";
+			public static final String VIP = "vip";
+			public static final String FINANCE = "finance";
+
+		}
+	}
 	public static final class C2g_test_charge{
 		public static final int mainCode_value = MainCode.TEST;
 		public static final int subCode_value = 1;
@@ -925,6 +989,7 @@ public class Protocols{
 		public static final int mainCode_value = MainCode.CHAT;
 		public static final int subCode_value = 1;
 		public static final String REVMSG = "revMsg";
+		public static final String HORN = "horn";
 
 	}
 	public static final class G2c_send_msg{
@@ -937,6 +1002,13 @@ public class Protocols{
 		public static final String LVL = "lvl";
 		public static final String VIP = "vip";
 		public static final String FINANCE = "finance";
+		public static final String HORN = "horn";
+
+	}
+	public static final class G2c_system_msg{
+		public static final int mainCode_value = MainCode.CHAT;
+		public static final int subCode_value = 3;
+		public static final String REVMSG = "revMsg";
 
 	}
 	public static final class G2l_login{
@@ -1028,6 +1100,8 @@ public class Protocols{
 		public static final String SIGNDAYS = "signDays";
 		public static final String SIGNED = "signed";
 		public static final String HEADS = "heads";
+		public static final String ALMS_CNT = "alms_cnt";
+		public static final String ALMS_TIME = "alms_time";
 
 	}
 	public static final class G2l_mail_list{
@@ -1203,6 +1277,7 @@ public class Protocols{
 		public static final String UUID = "uuid";
 		public static final String SEX = "sex";
 		public static final String LV = "lv";
+		public static final String EXP = "exp";
 		public static final String NAME = "name";
 		public static final String HEAD = "head";
 		public static final String VIP = "vip";
@@ -1225,6 +1300,57 @@ public class Protocols{
 		public static final int subCode_value = 28;
 		public static final String UUID = "uuid";
 
+	}
+	public static final class L2g_sendMail{
+		public static final int mainCode_value = MainCode.PLAYER_DATA_LOGIN;
+		public static final int subCode_value = 29;
+		public static final String UUID = "uuid";
+		public static final String TITLE = "title";
+		public static final String CONTENT = "content";
+		public static final String ATTACHMENTS = "attachments";
+
+	}
+	public static final class L2g_sendGameNotice{
+		public static final int mainCode_value = MainCode.PLAYER_DATA_LOGIN;
+		public static final int subCode_value = 30;
+		public static final String CONTENT = "content";
+
+	}
+	public static final class L2g_player_charge{
+		public static final int mainCode_value = MainCode.PLAYER_DATA_LOGIN;
+		public static final int subCode_value = 31;
+		public static final String UUID = "uuid";
+		public static final String COIN = "coin";
+
+	}
+	public static final class G2l_charts_get_list{
+		public static final int mainCode_value = MainCode.CHARTS;
+		public static final int subCode_value = 1;
+		public static final String SERVER_ID = "server_id";
+		public static final String UUID_SELF = "uuid_self";
+		public static final String CHARTS_TYPE = "charts_type";
+
+	}
+	public static final class L2g_charts_get_list{
+		public static final int mainCode_value = MainCode.CHARTS;
+		public static final int subCode_value = 2;
+		public static final String SERVER_ID = "server_id";
+		public static final String UUID_SELF = "uuid_self";
+		public static final String CHARTS_TYPE = "charts_type";
+		public static final String PLAYER_LIST = "player_list";
+
+		public static final class Player_list{
+			public static final String RANK = "rank";
+			public static final String VALUE = "value";
+			public static final String UUID = "uuid";
+			public static final String NAME = "name";
+			public static final String SEX = "sex";
+			public static final String HEAD = "head";
+			public static final String LVL = "lvl";
+			public static final String VIP = "vip";
+			public static final String FINANCE = "finance";
+
+		}
 	}
 	public static final class Inner_sdk_verify_suc{
 		public static final int mainCode_value = MainCode.PLAYER_LOGIN;
@@ -1272,6 +1398,11 @@ public class Protocols{
 		public static final String TABLEID = "tableId";
 		public static final String SEAT_INDEX = "seat_index";
 		public static final String ROUND = "round";
+
+	}
+	public static final class Inner_login_charts_update{
+		public static final int mainCode_value = MainCode.CHARTS;
+		public static final int subCode_value = 101;
 
 	}
 	public static final class DB_game_coin_change{
@@ -1483,6 +1614,35 @@ public class Protocols{
 		public static final String UUID = "uuid";
 
 	}
+	public static final class DB_search_frozen_player{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 26;
+		public static final String GM_UUID = "gm_uuid";
+
+	}
+	public static final class DB_search_silent_player{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 27;
+		public static final String GM_UUID = "gm_uuid";
+
+	}
+	public static final class DB_charts_update_record{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 28;
+		public static final String TIME = "time";
+		public static final String UUID = "uuid";
+		public static final String COLUMN_NAME = "column_name";
+		public static final String COLUMN_VALUE = "column_value";
+
+	}
+	public static final class DB_player_charge{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 29;
+		public static final String UUID = "uuid";
+		public static final String COIN = "coin";
+		public static final String AMOUNT = "amount";
+
+	}
 	public static final class Gm2l_login{
 		public static final int mainCode_value = MainCode.GM_TOOL;
 		public static final int subCode_value = 1;
@@ -1613,6 +1773,61 @@ public class Protocols{
 		public static final int subCode_value = 18;
 
 	}
+	public static final class Gm2l_search_frozen_player{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 19;
+
+	}
+	public static final class Gm2l_search_silent_player{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 20;
+
+	}
+	public static final class Gm2l_send_game_notice{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 21;
+		public static final String CONTENT = "content";
+		public static final String STARTTIME = "startTime";
+		public static final String ENDTIME = "endTime";
+		public static final String INTERVAL = "interval";
+
+	}
+	public static final class L2gm_send_game_notice{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 22;
+		public static final String UUID = "uuid";
+
+	}
+	public static final class Gm2l_game_notice_list{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 23;
+
+	}
+	public static final class L2gm_game_notice_list{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 24;
+		public static final String LIST = "list";
+
+		public static final class List{
+			public static final String UUID = "uuid";
+			public static final String CONTENT = "content";
+			public static final String STARTTIME = "startTime";
+			public static final String ENDTIME = "endTime";
+			public static final String INTERVAL = "interval";
+
+		}
+	}
+	public static final class Gm2l_del_game_notice{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 25;
+		public static final String UUID = "uuid";
+
+	}
+	public static final class L2gm_del_game_notice{
+		public static final int mainCode_value = MainCode.GM_TOOL;
+		public static final int subCode_value = 26;
+
+	}
 	public static final class ProtocolConst {
 		public static final String L2G_LOGIN_OPT_SUC ="1";
 
@@ -1636,6 +1851,7 @@ public class Protocols{
 		public static final int CHAT =16;
 		public static final int FRIEND =17;
 		public static final int ALMS =18;
+		public static final int CHARTS =19;
 		public static final int TEST =70;
 		public static final int HEART =80;
 		public static final int GAME_DB =50;

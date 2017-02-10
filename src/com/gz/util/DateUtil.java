@@ -138,6 +138,38 @@ public class DateUtil {
 	}
 
 	/**
+	 * 两个日期之差
+	 * 
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 */
+	public static long dateDays2(String date1, String date2) throws Exception {
+		SimpleDateFormat formatter = new SimpleDateFormat(DEFAULT_PATTERN);
+		long myTime, myTime2, days = 0;
+		Date aDate2, aDate;
+		try {
+			aDate = formatter.parse(date1);// 任意日期，包括当前日期
+			myTime = (aDate.getTime() / 1000);
+
+			aDate2 = formatter.parse(date2);// 任意日期，包括当前日期
+			myTime2 = (aDate2.getTime() / 1000);
+
+			if (myTime > myTime2) {
+				days = (myTime - myTime2) / (60 * 60 * 24);
+			} else {
+				days = (myTime2 - myTime) / (60 * 60 * 24);
+			}
+		} catch (Exception e) {
+//			e.printStackTrace();
+			throw e;
+		}
+
+		return days;
+
+	}
+	
+	/**
 	 * 返回前天的日期字符串(当前是2007年3月27日，将返回2007-03-25)
 	 * 
 	 * @return

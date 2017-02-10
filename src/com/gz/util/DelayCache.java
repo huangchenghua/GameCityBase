@@ -5,6 +5,8 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+
 //import com.gz.gamecity.bean.Player;
 
 
@@ -15,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Created on 2014-1-11 上午11:30:36 by sunzhenchao mychaoyue2011@163.com
  */
 public class DelayCache<K, V extends TimeUpItem> {
+	private static final Logger log = Logger.getLogger(DelayCache.class);
 
     public ConcurrentHashMap<K, V> map = new ConcurrentHashMap<K, V>();
     public DelayQueue<DelayedItem<K>> queue = new DelayQueue<DelayedItem<K>>();
@@ -36,6 +39,7 @@ public class DelayCache<K, V extends TimeUpItem> {
             queue.remove(tmpItem);
         }
         queue.put(tmpItem);
+//        log.info("put:queue.size()====================="+queue.size());
     }
 	
 	public V remove(K k){
@@ -63,6 +67,7 @@ public class DelayCache<K, V extends TimeUpItem> {
         while (true) {
         	try {
         		DelayedItem<K> delayedItem = queue.take();
+//                log.info("remove:queue.size()====================="+queue.size());
                 if (delayedItem != null) {
                 	TimeUpItem item = map.remove(delayedItem.getT());
                 	if(item!=null)
@@ -120,13 +125,19 @@ class DelayedItem<T> implements Delayed{
     
     @Override
     public int compareTo(Delayed o) {
-    	DelayedItem di = (DelayedItem)o;  
-        return expire-di.expire>0?1:0;  
+    	DelayedItem di = (DelayedItem)o; 
+    	if(this.expire>di.expire)  
+            return 1;  
+        if(this.expire<di.expire)  
+            return -1;  
+        return 0;
+//        return expire-di.expire>0?1:-1;  
     }
 
     @Override
     public long getDelay(TimeUnit unit) {
-    	return expire - System.currentTimeMillis();
+    	return unit.convert(expire - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+//    	return expire - System.currentTimeMillis();
     }
 
     public T getT() {
