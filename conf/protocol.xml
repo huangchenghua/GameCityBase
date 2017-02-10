@@ -564,6 +564,11 @@
 		<subCode>18</subCode>
 		<field name="is_show" type="boolean"/>
 	</protocol>
+	<protocol name="g2c_texas_coin_call">
+		<mainCode>texas</mainCode>
+		<subCode>19</subCode>
+		<field name="coin_call" type="long" />
+	</protocol>
 	
 	
 	
@@ -1292,8 +1297,8 @@
 		<field name="charts_type" type="int"/>
 	</protocol>
 	<protocol name="l2g_charts_get_list">
-		<mainCode>charts</mainCode>
-		<subCode>2</subCode>
+		<mainCode>player_data_login</mainCode>
+		<subCode>32</subCode>
 		<field name="server_id" type="int"/>
 		<field name="uuid_self" type="String"/>
 		<field name="charts_type" type="int"/>
@@ -1309,7 +1314,15 @@
 			<field name="finance" type="int"/>
 		</field>
 	</protocol>
-	
+	<protocol name="g2l_charts_update_record">
+		<mainCode>charts</mainCode>
+		<subCode>3</subCode>
+		<field name="uuid" type="String"/>
+		<field name="charm_add" type="long"/>
+		<field name="coin_add" type="long"/>
+		<field name="pay_add" type="long"/>
+		<field name="coin_total" type="long"/>
+	</protocol>
 	
 	<!-- 以下是登录服内部协议 -->
 	<!-- 以下是登录服内部协议号 -->
@@ -1580,15 +1593,44 @@
 		<field name="column_name" type="String"/>
 		<field name="column_value" type="long"/>
 	</protocol>
-	<protocol name="DB_player_charge">
+
+	<protocol name="DB_charts_get_list">
 		<mainCode>game_db</mainCode>
 		<subCode>29</subCode>
+		<field name="time" type="int"/>
+		<field name="column_name" type="String"/>
+		<field name="num" type="int"/>
+		<field name="charts_type" type="int"/>
+	</protocol>
+
+	<protocol name="DB_player_charge">
+		<mainCode>game_db</mainCode>
+		<subCode>30</subCode>
 		<field name="uuid" type="String"/>
 		<field name="coin" type="long"/>
 		<field name="amount" type="long"/>
 	</protocol>
+
+	<protocol name="DB_charts_top_insert">
+		<mainCode>game_db</mainCode>
+		<subCode>31</subCode>
+		<field name="player_list" type="obj" array="true">
+			<field name="time" type="int"/>
+			<field name="charts_type" type="int"/>
+			<field name="rank" type="int"/>
+			<field name="uuid" type="String"/>
+			<field name="value" type="long"/>
+		</field>
+	</protocol>
 	
-	
+	<protocol name="DB_charts_record_set">
+		<mainCode>game_db</mainCode>
+		<subCode>32</subCode>
+		<field name="time" type="int"/>
+		<field name="uuid" type="String"/>
+		<field name="column_name" type="String"/>
+		<field name="column_value" type="long"/>
+	</protocol>
 	
 	<!-- 以下是mainCode定义 -->
 	<mainCode name="gameServer_login">1</mainCode>
@@ -1610,7 +1652,6 @@
 	<mainCode name="friend">17</mainCode>
 	<mainCode name="alms">18</mainCode>
 	<mainCode name="charts">19</mainCode>
-	
 	
 	<mainCode name="test">70</mainCode>
 	<mainCode name="heart">80</mainCode>

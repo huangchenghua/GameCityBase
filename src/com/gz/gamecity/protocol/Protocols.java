@@ -586,6 +586,12 @@ public class Protocols{
 		public static final String IS_SHOW = "is_show";
 
 	}
+	public static final class G2c_texas_coin_call{
+		public static final int mainCode_value = MainCode.TEXAS;
+		public static final int subCode_value = 19;
+		public static final String COIN_CALL = "coin_call";
+
+	}
 	public static final class C2g_fruit_enter{
 		public static final int mainCode_value = MainCode.FRUIT;
 		public static final int subCode_value = 1;
@@ -1332,8 +1338,8 @@ public class Protocols{
 
 	}
 	public static final class L2g_charts_get_list{
-		public static final int mainCode_value = MainCode.CHARTS;
-		public static final int subCode_value = 2;
+		public static final int mainCode_value = MainCode.PLAYER_DATA_LOGIN;
+		public static final int subCode_value = 32;
 		public static final String SERVER_ID = "server_id";
 		public static final String UUID_SELF = "uuid_self";
 		public static final String CHARTS_TYPE = "charts_type";
@@ -1351,6 +1357,16 @@ public class Protocols{
 			public static final String FINANCE = "finance";
 
 		}
+	}
+	public static final class G2l_charts_update_record{
+		public static final int mainCode_value = MainCode.CHARTS;
+		public static final int subCode_value = 3;
+		public static final String UUID = "uuid";
+		public static final String CHARM_ADD = "charm_add";
+		public static final String COIN_ADD = "coin_add";
+		public static final String PAY_ADD = "pay_add";
+		public static final String COIN_TOTAL = "coin_total";
+
 	}
 	public static final class Inner_sdk_verify_suc{
 		public static final int mainCode_value = MainCode.PLAYER_LOGIN;
@@ -1635,12 +1651,44 @@ public class Protocols{
 		public static final String COLUMN_VALUE = "column_value";
 
 	}
-	public static final class DB_player_charge{
+	public static final class DB_charts_get_list{
 		public static final int mainCode_value = MainCode.GAME_DB;
 		public static final int subCode_value = 29;
+		public static final String TIME = "time";
+		public static final String COLUMN_NAME = "column_name";
+		public static final String NUM = "num";
+		public static final String CHARTS_TYPE = "charts_type";
+
+	}
+	public static final class DB_player_charge{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 30;
 		public static final String UUID = "uuid";
 		public static final String COIN = "coin";
 		public static final String AMOUNT = "amount";
+
+	}
+	public static final class DB_charts_top_insert{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 31;
+		public static final String PLAYER_LIST = "player_list";
+
+		public static final class Player_list{
+			public static final String TIME = "time";
+			public static final String CHARTS_TYPE = "charts_type";
+			public static final String RANK = "rank";
+			public static final String UUID = "uuid";
+			public static final String VALUE = "value";
+
+		}
+	}
+	public static final class DB_charts_record_set{
+		public static final int mainCode_value = MainCode.GAME_DB;
+		public static final int subCode_value = 32;
+		public static final String TIME = "time";
+		public static final String UUID = "uuid";
+		public static final String COLUMN_NAME = "column_name";
+		public static final String COLUMN_VALUE = "column_value";
 
 	}
 	public static final class Gm2l_login{
